@@ -9,7 +9,6 @@ export const site = {
   location: "Bengaluru, India",
   domain: "anishdevlops.xyz",
   url: "https://anishdevlops.xyz",
-  // TODO(anish): confirm these two before launch
   email: "anishwork69@gmail.com",
   github: "https://github.com/Anish358",
   linkedin: "https://www.linkedin.com/in/anish358",

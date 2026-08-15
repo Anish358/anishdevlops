@@ -89,11 +89,6 @@ several children.
 
 ## Before launch
 
-- [ ] Set `RESEND_API_KEY` locally and in Vercel, or the form can't deliver
-- [ ] Confirm the GitHub URL in `src/lib/content.ts` (`Anish358` vs `Anish4433`)
-- [ ] Confirm the contact email in `src/lib/content.ts`
-- [ ] Add the PropVexis GitHub link once that repo is public (currently private,
-      so a link would 404)
 - [ ] Add the PropVexis AI bullet once that feature ships
 
 ## Deploy
