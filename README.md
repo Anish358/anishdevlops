@@ -27,9 +27,9 @@ element is a demonstration of the work rather than decoration around it:
 - **Hero** — an ambient equity-curve canvas (`TickChart`), the visual language of
   the product being described. Deliberately abstract: a seeded random walk with no
   axes or numbers, so it never reads as a claim about data.
-- **Instrument panel** — four real metrics that count up on scroll-in. **No
-  sparklines**: a fake trend line beside a true number would be a lie told in
-  pixels.
+- **Spec card** — the hero's right column: a manifest of facts in mono, not a
+  paragraph of self-description. A stat panel lived here first and was cut; bare
+  numbers read as noise without the context the case study gives them.
 - **Architecture diagram** — hand-authored SVG of the real PropVexis data path,
   with animated flow along each edge. This is the centrepiece; it's what makes an
   interviewer stop and read.
@@ -49,7 +49,11 @@ Rules:
   — reveals, canvas, flow dashes, blink — off under `prefers-reduced-motion`. The
   canvas also pauses when offscreen or the tab is hidden.
 - Icons are inline SVG. Never emoji.
-- No animation library and no UI library. The whole site is still two static routes.
+- No animation library and no UI library. Everything prerenders except the
+  contact relay.
+- **Homepage cards stay shallow** — name, description, diagram, stack, links. The
+  problem statement, features and trade-offs belong on the case study. A card that
+  says everything gives the reader no reason to click.
 
 ## Contact form
 
@@ -76,6 +80,7 @@ verifying a domain; switch `CONTACT_FROM` once `anishdevlops.xyz` is verified.
 | --- | --- |
 | `/` | The one-pager: hero, projects, experience, stack, contact |
 | `/propvexis` | Long-form case study — architecture, decisions and trade-offs |
+| `/luxora` | Shorter case study — why it exists and what's in it |
 | `/api/contact` | Contact form relay (the only dynamic route) |
 | `/opengraph-image` | 1200×630 social card, generated at build time |
 | `/icon.svg` | Favicon, derived from the `anish.` wordmark |
@@ -93,12 +98,19 @@ several children.
 
 ## Deploy
 
-1. Push to a new GitHub repo.
-2. Import the repo on Vercel — no configuration needed, it detects Next.js.
-3. Vercel → Project → **Settings → Domains** → add `anishdevlops.xyz` and
-   `www.anishdevlops.xyz`.
-4. At the registrar, point DNS at Vercel: an `A` record for the apex to the IP
-   Vercel shows, and a `CNAME` for `www` → `cname.vercel-dns.com`. (Vercel prints
-   the exact values when you add the domain — use those, not these.)
-5. Delete the old `anishdevlops.vercel.app` project **after** the new domain
-   serves traffic, so no link in the wild breaks in between.
+Live at **https://anishdevlops.xyz**. Pushing to `main` on
+`Anish358/anishdevlops` deploys to production automatically.
+
+- **Vercel project:** `anishdevlops` (a separate, older project named `portfolio`
+  still owns `anishdevlops.vercel.app` — don't confuse the two when testing).
+- **DNS:** GoDaddy. Apex `A @ → 216.198.79.1`, `CNAME www →
+  c06a2f428dfee002.vercel-dns-017.com`. The legacy `76.76.21.21` /
+  `cname.vercel-dns.com` pair also works; Vercel just nags about it.
+- **Env:** `RESEND_API_KEY` must exist in Vercel → Environment Variables →
+  Production, otherwise the contact form returns 503 in production.
+- TLS is issued automatically by Vercel once DNS resolves. If HTTPS fails right
+  after a DNS change, the certificate is still being provisioned — check for a
+  `CAA` record before assuming anything is actually wrong.
+- After changing DNS, a local resolver can serve the old IP until its TTL
+  expires. `dig @8.8.8.8 anishdevlops.xyz` shows the truth;
+  `sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder` fixes the Mac.
