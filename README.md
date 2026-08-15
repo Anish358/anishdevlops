@@ -1,36 +1,109 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# anishdevlops.xyz — portfolio
 
-## Getting Started
+Recruiter-facing personal site. Static, dark-only, one page.
 
-First, run the development server:
+**Stack:** Next.js 16 (App Router, static export by default) · TypeScript · Tailwind CSS v4 · Inter + JetBrains Mono via `next/font` · no UI library, no animation library.
+
+## Develop
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
+pnpm dev      # http://localhost:3000
+pnpm build    # verify it still prerenders as static
+pnpm lint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Editing content
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**All copy lives in `src/lib/content.ts`.** Components read from it and contain no
+prose. Add a project by pushing to the `projects` array; add a role by pushing to
+`experience`. Nothing else needs touching.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Design concept — "Instrumented"
 
-## Learn More
+The site presents itself as a production system its author runs. Every visual
+element is a demonstration of the work rather than decoration around it:
 
-To learn more about Next.js, take a look at the following resources:
+- **Hero** — an ambient equity-curve canvas (`TickChart`), the visual language of
+  the product being described. Deliberately abstract: a seeded random walk with no
+  axes or numbers, so it never reads as a claim about data.
+- **Instrument panel** — four real metrics that count up on scroll-in. **No
+  sparklines**: a fake trend line beside a true number would be a lie told in
+  pixels.
+- **Architecture diagram** — hand-authored SVG of the real PropVexis data path,
+  with animated flow along each edge. This is the centrepiece; it's what makes an
+  interviewer stop and read.
+- **Pipeline** — the actual GitHub Actions stages behind app.propvexis.com.
+- **Stack** — bento grid, varied spans on a 6-column grid.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Rules:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Dark only. Near-black flat surfaces, hairline `1px` borders, an engineering grid
+  masked to a vignette, and 2.5% film grain. **No gradients, no glassmorphism, no
+  glowing blobs** — those read as a crypto landing page, not an engineer.
+- One accent: `--color-brand` `#3B82F6`, the same blue as the PropVexis product,
+  so the two surfaces read as one brand. Never used for large fills.
+- Inter for prose. JetBrains Mono for numbers, labels, technical headings and
+  every diagram annotation.
+- Motion: 12px/420ms rise on scroll-in, `cubic-bezier(0.16, 1, 0.3, 1)`. All of it
+  — reveals, canvas, flow dashes, blink — off under `prefers-reduced-motion`. The
+  canvas also pauses when offscreen or the tab is hidden.
+- Icons are inline SVG. Never emoji.
+- No animation library and no UI library. The whole site is still two static routes.
 
-## Deploy on Vercel
+## Contact form
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+`ContactForm` posts JSON to `/api/contact`, which validates and relays via
+Resend's REST API — no SDK dependency. It has a honeypot field, length caps, and
+distinct messages for each failure. Without `RESEND_API_KEY` set it returns a 503
+and the form tells visitors to email directly, so the page degrades instead of
+silently swallowing messages.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Setup: copy `.env.example` to `.env.local`, add a Resend API key, and add the same
+key in Vercel → Settings → Environment Variables. The default sender works without
+verifying a domain; switch `CONTACT_FROM` once `anishdevlops.xyz` is verified.
+
+## Conventions
+
+- **Resume lives in exactly one place** — the sticky nav button. It's visible at
+  every scroll position, which beats a copy in the hero and another in the footer.
+- Section labels are numbered (`01 Projects`, `02 Experience`, …).
+- Project links are only ever **Live site** and **GitHub**.
+
+## Routes
+
+| Route | What it is |
+| --- | --- |
+| `/` | The one-pager: hero, projects, experience, stack, contact |
+| `/propvexis` | Long-form case study — architecture, decisions and trade-offs |
+| `/api/contact` | Contact form relay (the only dynamic route) |
+| `/opengraph-image` | 1200×630 social card, generated at build time |
+| `/icon.svg` | Favicon, derived from the `anish.` wordmark |
+
+The social card is generated from `src/app/opengraph-image.tsx` with `next/og`,
+not exported from a design tool, so it can't drift from `content.ts`. It uses no
+external font — a failed font fetch during a deploy would break the build for the
+sake of a preview image. Note that Satori needs an explicit `display: flex` on any
+element with more than one child, and interpolated text (`{a} · {b}`) counts as
+several children.
+
+## Before launch
+
+- [ ] Set `RESEND_API_KEY` locally and in Vercel, or the form can't deliver
+- [ ] Confirm the GitHub URL in `src/lib/content.ts` (`Anish358` vs `Anish4433`)
+- [ ] Confirm the contact email in `src/lib/content.ts`
+- [ ] Add the PropVexis GitHub link once that repo is public (currently private,
+      so a link would 404)
+- [ ] Add the PropVexis AI bullet once that feature ships
+
+## Deploy
+
+1. Push to a new GitHub repo.
+2. Import the repo on Vercel — no configuration needed, it detects Next.js.
+3. Vercel → Project → **Settings → Domains** → add `anishdevlops.xyz` and
+   `www.anishdevlops.xyz`.
+4. At the registrar, point DNS at Vercel: an `A` record for the apex to the IP
+   Vercel shows, and a `CNAME` for `www` → `cname.vercel-dns.com`. (Vercel prints
+   the exact values when you add the domain — use those, not these.)
+5. Delete the old `anishdevlops.vercel.app` project **after** the new domain
+   serves traffic, so no link in the wild breaks in between.

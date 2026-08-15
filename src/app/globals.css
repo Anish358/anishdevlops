@@ -1,26 +1,181 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* Surfaces — near-black, flat, no gradients */
+  --color-bg: #08090b;
+  --color-surface: #0d0f13;
+  --color-surface-2: #12151a;
+  --color-border: #1f242c;
+  --color-border-strong: #2c333d;
+
+  /* Text */
+  --color-fg: #f3f5f7;
+  --color-fg-muted: #98a2b0;
+  --color-fg-subtle: #6a7380;
+
+  /* Brand — matches the PropVexis product palette */
+  --color-brand: #3b82f6;
+  --color-brand-hi: #60a5fa;
+  --color-brand-dim: #1d4ed8;
+
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-jetbrains);
+
+  --spacing-section: 7rem;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes flow {
+  to {
+    stroke-dashoffset: -10;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* offset for the sticky header when jumping to an anchor */
+    scroll-padding-top: 5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+    font-feature-settings: "cv11", "ss01";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: color-mix(in oklab, var(--color-brand) 32%, transparent);
+    color: var(--color-fg);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand-hi);
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    letter-spacing: -0.022em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+}
+
+@layer components {
+  /* Hairline engineering grid — depth without gradients or glow. */
+  .grid-backdrop {
+    background-image:
+      linear-gradient(to right, var(--color-border) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--color-border) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 20%, transparent 78%);
+    opacity: 0.5;
+  }
+
+  /* Faint film grain, kills the flatness of large dark areas. */
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .card {
+    border-radius: 18px;
+    border: 1px solid var(--color-border);
+    background-color: var(--color-surface);
+    transition:
+      border-color 220ms var(--ease-out),
+      background-color 220ms var(--ease-out);
+  }
+
+  .card-hover:hover {
+    border-color: var(--color-border-strong);
+    background-color: var(--color-surface-2);
+  }
+
+  /* Animated data flow along a diagram edge. */
+  .flow {
+    stroke-dasharray: 3 7;
+    animation: flow 900ms linear infinite;
+  }
+
+  .edge-label {
+    font-family: var(--font-mono), monospace;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    fill: var(--color-fg-subtle);
+    text-transform: uppercase;
+  }
+}
+
+@layer utilities {
+  /* Scroll-reveal: opt-in, and inert when the user prefers reduced motion */
+  .reveal {
+    opacity: 0;
+    transform: translateY(12px);
+    transition:
+      opacity 420ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
+  }
+
+  .reveal[data-shown="true"] {
+    opacity: 1;
+    transform: none;
+  }
+
+  .hairline {
+    background-image: linear-gradient(
+      to right,
+      transparent,
+      var(--color-border-strong) 12%,
+      var(--color-border-strong) 88%,
+      transparent
+    );
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .flow,
+  [class*="animate-"] {
+    animation: none !important;
+  }
 }
