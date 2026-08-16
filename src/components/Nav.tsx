@@ -4,6 +4,7 @@ import { Container } from "./primitives";
 
 // Root-relative so they also work from /propvexis, not just the home page.
 const links = [
+  { href: "/#ask", label: "Ask" },
   { href: "/#work", label: "Projects" },
   { href: "/#experience", label: "Experience" },
   { href: "/#skills", label: "Skills" },

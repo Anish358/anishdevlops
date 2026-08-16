@@ -181,6 +181,40 @@ check(
 );
 
 console.log("");
+console.log("Multi-turn");
+
+// Exactly what the chat panel does on a follow-up: replay the whole
+// alternating transcript. The server rejects a history that doesn't start and
+// end on the user, so this is the shape most likely to break silently.
+const opener = "What is PropVexis?";
+const firstAnswer = await ask(opener);
+const followUpHistory = [
+  { role: "user", content: opener },
+  { role: "assistant", content: firstAnswer.reply },
+  { role: "user", content: "Why did he choose Redis for it?" },
+];
+
+const followUp = await fetch(ENDPOINT, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ messages: followUpHistory }),
+}).then((r) => r.json());
+
+check("accepts a replayed transcript", Boolean(followUp.reply), followUp.error ?? "");
+check(
+  "a follow-up still reads the cache",
+  (followUp.usage?.cacheRead ?? 0) > 0,
+  `cache_read_input_tokens=${followUp.usage?.cacheRead ?? 0}`,
+);
+// The prior turns sit below the breakpoint, so they bill as fresh input —
+// this is the cost that the 12-turn cap exists to bound.
+check(
+  "prior turns bill as uncached input",
+  followUp.usage?.input > first.usage.input,
+  `${followUp.usage?.input} uncached tokens vs ${first.usage.input} on a fresh question`,
+);
+console.log(`\n  Follow-up answer: ${followUp.reply?.slice(0, 160)}…\n`);
+
 console.log("Answers (read these — not asserted)\n");
 
 const smoke = [

@@ -20,6 +20,39 @@ export const site = {
   availability: "Open to backend and platform roles",
 } as const;
 
+/**
+ * The AI assistant panel. Nobody knows what to ask a portfolio bot, so the
+ * empty state does the asking — and the last suggestion is deliberate: an
+ * engineer clicks "what's he not experienced in" first, and the honest answer
+ * is the most persuasive thing on the page.
+ */
+export const assistant = {
+  title: "Ask about my work",
+  intro:
+    "An AI assistant with a fixed set of facts about me — experience, projects, stack, and the things I haven't done. It answers from those facts only, and tells you when it doesn't know something rather than guessing.",
+  badge: "AI assistant",
+  disclaimer: "Answers are generated, so check anything that matters. Nothing you type is saved — close the tab and the conversation is gone.",
+  suggestionsLabel: "Try one of these",
+  suggestions: [
+    "What has he actually built?",
+    "Is he a fit for a backend role?",
+    "What's his experience with AWS?",
+    "What's he not experienced in?",
+  ],
+  placeholder: "Ask about his experience, projects or stack…",
+  send: "Send",
+  thinking: "Thinking…",
+  you: "you",
+  ai: "assistant",
+  /** Shown when the conversation hits the server's per-conversation turn cap. */
+  exhausted:
+    "That's as far as this conversation goes. Refresh to start a new one, or use the contact form to reach me directly.",
+  /** Last-resort copy when the network fails before the server can answer. */
+  offline: "Couldn't reach the assistant. Please try again, or use the contact form below.",
+  contactPrompt: "Prefer a human?",
+  contactLink: "Use the contact form",
+} as const;
+
 /** Hero side panel — a spec sheet, not a bio. Every row is a fact. */
 export const spec = [
   { key: "role", value: "Backend Developer" },
