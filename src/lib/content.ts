@@ -228,6 +228,7 @@ export const skills = [
       "IAM",
       "SSM",
       "Docker",
+      "Kubernetes",
       "Terraform",
       "GitHub Actions",
       "CI/CD",
