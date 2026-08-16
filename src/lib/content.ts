@@ -31,7 +31,13 @@ export const assistant = {
   intro:
     "An AI assistant with a fixed set of facts about me — experience, projects, stack, and the things I haven't done. It answers from those facts only, and tells you when it doesn't know something rather than guessing.",
   badge: "AI assistant",
-  disclaimer: "Answers are generated, so check anything that matters. Nothing you type is saved — close the tab and the conversation is gone.",
+  /**
+   * This has to stay true. Questions are logged from Phase 6 onward, so the
+   * earlier "nothing you type is saved" would now be a lie — on a site whose
+   * entire argument is that it doesn't overstate things.
+   */
+  disclaimer:
+    "Answers are generated, so check anything that matters. Questions are logged anonymously — no IP, no answers, no way to tie them to you — so I can see what people ask. The conversation itself isn't stored and goes when you close the tab.",
   suggestionsLabel: "Try one of these",
   suggestions: [
     "What has he actually built?",

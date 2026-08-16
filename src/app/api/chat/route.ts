@@ -1,6 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
-import { NextResponse } from "next/server";
+import { after, NextResponse } from "next/server";
 import { SYSTEM_PROMPT } from "@/lib/knowledge";
+import { logQuestion } from "@/lib/questions";
 import { checkLimits } from "@/lib/rate-limit";
 
 /**
@@ -232,10 +233,20 @@ export async function POST(request: Request) {
     );
   }
 
-  if (MOCK) {
+  // Questions only, and only real ones: no IP, no answer, no history, and
+  // nothing from mock mode — dev and production share one Upstash instance, so
+  // local UI testing would otherwise drown the signal this log exists for.
+  // after() runs once the response has been sent, so it costs the visitor
+  // nothing.
+  if (!MOCK) {
     const question = history[history.length - 1].content;
+    after(() => logQuestion(question));
+  }
+
+  if (MOCK) {
+    const asked = history[history.length - 1].content;
     const reply =
-      `[MOCK — no model was called, this answer is not real] You asked: "${question}". ` +
+      `[MOCK — no model was called, this answer is not real] You asked: "${asked}". ` +
       `Set ANTHROPIC_API_KEY and drop CHAT_MOCK to get a grounded answer.`;
     const usage = { input: 0, output: 0, cacheWrite: 0, cacheRead: 0 };
 

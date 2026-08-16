@@ -15,6 +15,12 @@
  * is correct is a judgement call; the eval set in Phase 5 is where that gets
  * mechanised.
  *
+ * On a failing cache assertion: prompt caching is best effort, not a
+ * guarantee, so an isolated miss is possible and has been observed once in
+ * roughly a dozen runs. Rerun before digging. A real regression — something
+ * varying above the cache breakpoint — fails every single time, which is what
+ * makes it easy to tell the two apart.
+ *
  *   pnpm dev                     # in one terminal
  *   pnpm verify:chat             # in another
  *   BASE_URL=https://anishdevlops.xyz pnpm verify:chat

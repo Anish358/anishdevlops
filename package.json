@@ -9,7 +9,8 @@
     "lint": "eslint",
     "verify:chat": "node scripts/verify-chat.mjs",
     "verify:limits": "node scripts/verify-limits.mjs",
-    "eval": "node scripts/eval.mjs"
+    "eval": "node scripts/eval.mjs",
+    "questions": "node scripts/questions.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.117.1",
