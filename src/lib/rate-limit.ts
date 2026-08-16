@@ -33,11 +33,6 @@ const LIMITS = {
   globalPerDay: num(process.env.CHAT_GLOBAL_PER_DAY, 500),
 } as const;
 
-const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL!,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
-});
-
 /**
  * Shared across invocations on a warm instance so an already-blocked visitor
  * costs no Redis round trip. Per-instance, so it is an optimisation only —
@@ -45,29 +40,56 @@ const redis = new Redis({
  */
 const ephemeralCache = new Map<string, number>();
 
-const sliding = (tokens: number, window: "1 h" | "1 d", prefix: string) =>
-  new Ratelimit({
-    redis,
-    limiter: Ratelimit.slidingWindow(tokens, window),
-    prefix,
-    analytics: false,
-    ephemeralCache,
+/**
+ * Built on first use, never at module scope.
+ *
+ * Vercel redacts sensitive environment variables during the build, so a client
+ * constructed at import time receives the literal string "[REDACTED]" while
+ * Next collects page data — and the Upstash client validates its URL eagerly,
+ * which fails the build. It passed locally because .env.local holds real
+ * values, so nothing catches this except deploying. Anything constructed from
+ * a secret belongs behind a lazy getter for the same reason.
+ */
+let limiters: {
+  ipHourly: Ratelimit;
+  ipDaily: Ratelimit;
+  globalDaily: Ratelimit;
+} | null = null;
+
+function getLimiters() {
+  if (limiters) return limiters;
+
+  const redis = new Redis({
+    url: process.env.UPSTASH_REDIS_REST_URL!,
+    token: process.env.UPSTASH_REDIS_REST_TOKEN!,
   });
 
-// Sliding windows for per-IP: a fixed window lets someone send the hour's
-// whole allowance at 10:59 and the next one at 11:00.
-const ipHourly = sliding(LIMITS.ipPerHour, "1 h", "chat:ip:h");
-const ipDaily = sliding(LIMITS.ipPerDay, "1 d", "chat:ip:d");
+  const sliding = (tokens: number, window: "1 h" | "1 d", prefix: string) =>
+    new Ratelimit({
+      redis,
+      limiter: Ratelimit.slidingWindow(tokens, window),
+      prefix,
+      analytics: false,
+      ephemeralCache,
+    });
 
-// The global cap is a fixed window on purpose: "500 answers a day, resets at
-// midnight UTC" is a ceiling you can reason about and explain, which matters
-// more here than smoothing the boundary.
-const globalDaily = new Ratelimit({
-  redis,
-  limiter: Ratelimit.fixedWindow(LIMITS.globalPerDay, "1 d"),
-  prefix: "chat:global",
-  analytics: false,
-});
+  limiters = {
+    // Sliding windows for per-IP: a fixed window lets someone send the hour's
+    // whole allowance at 10:59 and the next one at 11:00.
+    ipHourly: sliding(LIMITS.ipPerHour, "1 h", "chat:ip:h"),
+    ipDaily: sliding(LIMITS.ipPerDay, "1 d", "chat:ip:d"),
+    // The global cap is a fixed window on purpose: "500 answers a day, resets
+    // at midnight UTC" is a ceiling you can reason about and explain, which
+    // matters more here than smoothing the boundary.
+    globalDaily: new Ratelimit({
+      redis,
+      limiter: Ratelimit.fixedWindow(LIMITS.globalPerDay, "1 d"),
+      prefix: "chat:global",
+      analytics: false,
+    }),
+  };
+  return limiters;
+}
 
 /**
  * Rate limiting needs a stable per-visitor key, but the plan says no IP
@@ -105,6 +127,8 @@ export async function checkLimits(request: Request): Promise<Decision> {
   const key = visitorKey(request);
 
   try {
+    const { ipHourly, ipDaily, globalDaily } = getLimiters();
+
     const hourly = await ipHourly.limit(key);
     if (!hourly.success) {
       return {
