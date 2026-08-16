@@ -70,7 +70,15 @@ function renderText(text: string) {
 }
 
 export function Assistant() {
+  /**
+   * Settled exchanges only — every user turn here has an answer after it.
+   * The question currently in flight lives in `pending` instead, so a failed
+   * request can never leave a dangling user turn in the history we replay.
+   * (It could before: the server rightly rejects two user turns in a row, so
+   * one error used to break every question after it until a refresh.)
+   */
   const [turns, setTurns] = useState<Turn[]>([]);
+  const [pending, setPending] = useState<string | null>(null);
   const [draft, setDraft] = useState("");
   const [streaming, setStreaming] = useState(false);
   const [partial, setPartial] = useState("");
@@ -99,7 +107,7 @@ export function Assistant() {
     if (!text || busy || exhausted) return;
 
     const history: Turn[] = [...turns, { role: "user", content: text }];
-    setTurns(history);
+    setPending(text);
     setDraft("");
     setError("");
     setPartial("");
@@ -136,8 +144,10 @@ export function Assistant() {
         return;
       }
 
+      // Only on a real answer does the exchange join the transcript.
       if (answer.trim()) {
         setTurns([...history, { role: "assistant", content: answer.trim() }]);
+        setPending(null);
       } else {
         setError(assistant.offline);
       }
@@ -158,7 +168,7 @@ export function Assistant() {
     void send(draft);
   }
 
-  const empty = turns.length === 0 && !streaming && !error;
+  const empty = turns.length === 0 && pending === null && !streaming && !error;
 
   return (
     <div className="card overflow-hidden">
@@ -214,6 +224,15 @@ export function Assistant() {
               </p>
             </div>
           ))}
+
+          {pending !== null ? (
+            <div className="space-y-1.5">
+              <p className="font-mono text-[10px] tracking-[0.18em] text-fg-subtle uppercase">
+                {assistant.you}
+              </p>
+              <p className="text-[15px] text-fg">{pending}</p>
+            </div>
+          ) : null}
 
           {streaming ? (
             <div className="space-y-1.5">

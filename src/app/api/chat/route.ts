@@ -1,6 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { NextResponse } from "next/server";
 import { SYSTEM_PROMPT } from "@/lib/knowledge";
+import { checkLimits } from "@/lib/rate-limit";
 
 /**
  * Phase 1: non-streaming, so answers can be verified with curl before the
@@ -215,16 +216,61 @@ export async function POST(request: Request) {
   const history = parseHistory(body.messages);
   if (typeof history === "string") return fail(history, 400);
 
+  // Before the mock, not after: the endpoint is either protected or it isn't,
+  // and running the limiter on every path is also what makes it testable
+  // without spending anything.
+  const decision = await checkLimits(request);
+  if (!decision.ok) {
+    return NextResponse.json(
+      { error: decision.error },
+      {
+        status: decision.status,
+        headers: decision.retryAfter
+          ? { "Retry-After": String(decision.retryAfter) }
+          : undefined,
+      },
+    );
+  }
+
   if (MOCK) {
     const question = history[history.length - 1].content;
-    return NextResponse.json({
-      mock: true,
-      reply:
-        `[MOCK — no model was called, this answer is not real] You asked: "${question}". ` +
-        `Set ANTHROPIC_API_KEY and drop CHAT_MOCK to get a grounded answer.`,
-      usage: { input: 0, output: 0, cacheWrite: 0, cacheRead: 0 },
-      stopReason: "end_turn",
-    });
+    const reply =
+      `[MOCK — no model was called, this answer is not real] You asked: "${question}". ` +
+      `Set ANTHROPIC_API_KEY and drop CHAT_MOCK to get a grounded answer.`;
+    const usage = { input: 0, output: 0, cacheWrite: 0, cacheRead: 0 };
+
+    // The mock has to answer in whichever shape was asked for. Returning JSON
+    // to a caller reading an event stream makes the mock useless from the very
+    // UI it exists to support.
+    if (body.stream === true) {
+      const encoder = new TextEncoder();
+      const frame = (payload: unknown) =>
+        encoder.encode(`data: ${JSON.stringify(payload)}\n\n`);
+
+      return new Response(
+        new ReadableStream<Uint8Array>({
+          async start(controller) {
+            controller.enqueue(frame({ type: "mock" }));
+            // Chunked so the streaming UI has something to animate.
+            for (const word of reply.split(" ")) {
+              controller.enqueue(frame({ type: "delta", text: `${word} ` }));
+              await new Promise((resolve) => setTimeout(resolve, 20));
+            }
+            controller.enqueue(frame({ type: "done", usage, stopReason: "end_turn" }));
+            controller.close();
+          },
+        }),
+        {
+          headers: {
+            "Content-Type": "text/event-stream; charset=utf-8",
+            "Cache-Control": "no-cache, no-transform",
+            "X-Accel-Buffering": "no",
+          },
+        },
+      );
+    }
+
+    return NextResponse.json({ mock: true, reply, usage, stopReason: "end_turn" });
   }
 
   if (!process.env.ANTHROPIC_API_KEY) {

@@ -23,13 +23,25 @@
 const BASE_URL = process.env.BASE_URL ?? "http://localhost:3000";
 const ENDPOINT = `${BASE_URL.replace(/\/$/, "")}/api/chat`;
 
+/**
+ * This script sends more questions than one visitor is allowed per hour, so
+ * each request presents a distinct synthetic address. That is deliberate: this
+ * file verifies answers, caching and streaming, and `pnpm verify:limits` is
+ * what verifies the limiter. Conversation state lives in the request body, not
+ * in a session, so a per-request address changes nothing else. The global
+ * daily cap still applies, as it should.
+ */
+const asVisitor = () => ({
+  "x-forwarded-for": `198.51.100.${Math.floor(Math.random() * 250) + 1}`,
+});
+
 /** Sonnet 5 will not cache a prefix shorter than this. Below it, silently no cache. */
 const MIN_CACHEABLE_PREFIX = 1024;
 
 async function ask(question) {
   const response = await fetch(ENDPOINT, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...asVisitor() },
     body: JSON.stringify({ messages: [{ role: "user", content: question }] }),
   });
 
@@ -106,7 +118,7 @@ async function askStreaming(question) {
   const startedAt = Date.now();
   const response = await fetch(ENDPOINT, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...asVisitor() },
     body: JSON.stringify({
       stream: true,
       messages: [{ role: "user", content: question }],
@@ -196,7 +208,7 @@ const followUpHistory = [
 
 const followUp = await fetch(ENDPOINT, {
   method: "POST",
-  headers: { "Content-Type": "application/json" },
+  headers: { "Content-Type": "application/json", ...asVisitor() },
   body: JSON.stringify({ messages: followUpHistory }),
 }).then((r) => r.json());
 
