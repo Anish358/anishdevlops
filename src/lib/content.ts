@@ -20,6 +20,45 @@ export const site = {
   availability: "Open to backend and platform roles",
 } as const;
 
+/**
+ * The AI assistant panel. Nobody knows what to ask a portfolio bot, so the
+ * empty state does the asking — and the last suggestion is deliberate: an
+ * engineer clicks "what's he not experienced in" first, and the honest answer
+ * is the most persuasive thing on the page.
+ */
+export const assistant = {
+  title: "Ask about my work",
+  intro:
+    "An AI assistant with a fixed set of facts about me — experience, projects, stack, and the things I haven't done. It answers from those facts only, and tells you when it doesn't know something rather than guessing.",
+  badge: "AI assistant",
+  /**
+   * This has to stay true. Questions are logged from Phase 6 onward, so the
+   * earlier "nothing you type is saved" would now be a lie — on a site whose
+   * entire argument is that it doesn't overstate things.
+   */
+  disclaimer:
+    "Answers are generated, so check anything that matters. Questions are logged anonymously — no IP, no answers, no way to tie them to you — so I can see what people ask. The conversation itself isn't stored and goes when you close the tab.",
+  suggestionsLabel: "Try one of these",
+  suggestions: [
+    "What has he actually built?",
+    "Is he a fit for a backend role?",
+    "What's his experience with AWS?",
+    "What's he not experienced in?",
+  ],
+  placeholder: "Ask about his experience, projects or stack…",
+  send: "Send",
+  thinking: "Thinking…",
+  you: "you",
+  ai: "assistant",
+  /** Shown when the conversation hits the server's per-conversation turn cap. */
+  exhausted:
+    "That's as far as this conversation goes. Refresh to start a new one, or use the contact form to reach me directly.",
+  /** Last-resort copy when the network fails before the server can answer. */
+  offline: "Couldn't reach the assistant. Please try again, or use the contact form below.",
+  contactPrompt: "Prefer a human?",
+  contactLink: "Use the contact form",
+} as const;
+
 /** Hero side panel — a spec sheet, not a bio. Every row is a fact. */
 export const spec = [
   { key: "role", value: "Backend Developer" },
@@ -228,6 +267,7 @@ export const skills = [
       "IAM",
       "SSM",
       "Docker",
+      "Kubernetes",
       "Terraform",
       "GitHub Actions",
       "CI/CD",

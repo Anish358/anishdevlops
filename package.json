@@ -6,9 +6,16 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "verify:chat": "node scripts/verify-chat.mjs",
+    "verify:limits": "node scripts/verify-limits.mjs",
+    "eval": "node scripts/eval.mjs",
+    "questions": "node scripts/questions.mjs"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.117.1",
+    "@upstash/ratelimit": "^2.0.8",
+    "@upstash/redis": "^1.38.2",
     "next": "16.3.0",
     "react": "19.2.8",
     "react-dom": "19.2.8"
