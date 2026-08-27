@@ -1,13 +1,16 @@
 /**
  * The assistant's entire knowledge base, plus the system prompt that wraps it.
  *
- * Everything here is assembled ONCE, at module load, into frozen strings. That
- * is not a micro-optimisation — it is the contract that makes prompt caching
- * work. The cached prefix must be byte-identical on every request, so nothing
- * in this file may depend on the clock, the request, or the visitor. No
- * `new Date()`, no session id, no interpolated name. If a byte above the cache
- * breakpoint changes, every request pays full input price and the cache never
- * reports a read.
+ * Everything here is assembled ONCE, at module load, into frozen strings.
+ * Nothing in this file may depend on the clock, the request, or the visitor —
+ * no `new Date()`, no session id, no interpolated name.
+ *
+ * That rule started life as a prompt-caching requirement (a cached prefix has
+ * to be byte-identical or every request pays full price). Free-tier inference
+ * removed the cost argument, but the rule stays for two better reasons: a
+ * stable prompt is what makes the eval set meaningful — a prefix that varies
+ * per request means yesterday's 37/37 says nothing about today — and Gemini's
+ * implicit prefix caching rewards it anyway.
  *
  * Facts come from `content.ts` wherever the site already publishes them, so
  * editing a project description updates the site and the assistant together.

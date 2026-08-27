@@ -6,10 +6,14 @@ import { env, requireEnv } from "@/lib/env";
 /**
  * Spend controls for /api/chat.
  *
- * This is a public endpoint that costs money on every request, so it needs a
- * ceiling before it is public, not after. Counters live in Upstash rather than
- * in process memory because serverless invocations do not share memory — an
- * in-process counter resets constantly and enforces nothing.
+ * The endpoint runs on Gemini's free tier, so a request no longer costs money
+ * — but it still costs a slice of a shared daily quota, and an unbounded
+ * public LLM endpoint is someone else's free API. These limits keep one
+ * visitor from consuming the day's requests for everyone.
+ *
+ * Counters live in Upstash rather than in process memory because serverless
+ * invocations do not share memory — an in-process counter resets constantly
+ * and enforces nothing.
  *
  * Two layers, doing different jobs:
  *   - per-IP limits stop one visitor monopolising or probing the endpoint
@@ -30,7 +34,7 @@ const num = (value: string | undefined, fallback: number) => {
 const LIMITS = {
   ipPerHour: num(env("CHAT_IP_PER_HOUR"), 10),
   ipPerDay: num(env("CHAT_IP_PER_DAY"), 30),
-  /** At ~$0.008/question this is roughly $4/day worst case — see README. */
+  /** Well under Gemini's free-tier ceiling (~1,500/day), so ours bites first. */
   globalPerDay: num(env("CHAT_GLOBAL_PER_DAY"), 500),
 } as const;
 

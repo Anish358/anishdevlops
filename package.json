@@ -13,7 +13,7 @@
     "questions": "node scripts/questions.mjs"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.117.1",
+    "@google/genai": "^2.19.0",
     "@upstash/ratelimit": "^2.0.8",
     "@upstash/redis": "^1.38.2",
     "next": "16.3.0",

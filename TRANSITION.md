@@ -301,3 +301,41 @@ The build is a day or two. What makes it worth discussing is the reasoning:
 
 That is a more interesting conversation than most candidates' AI experience,
 and all of it is true.
+
+---
+
+## 11. Addendum: moved from Claude Sonnet 5 to Gemini's free tier
+
+Shipped on Sonnet 5 and ran that way first. The switch was not about model
+quality — it was about a failure mode that only appears in operation.
+
+**A prepaid balance runs out silently.** Nobody checks a portfolio's billing
+page. The endpoint degrades honestly when the credit is gone (it says so and
+points at the contact form), but the owner never finds out — so "the assistant
+has been dead for three weeks" is something a recruiter discovers, or nobody
+does. A per-day cap does not fix that; it only decides how fast the money
+goes. A free tier cannot run out of money. It can only hit a daily request
+ceiling and recover the next day.
+
+What that changed, and what it did not:
+
+- **No RAG: unchanged.** The knowledge base is ~6.3k tokens, it fits, and
+  retrieval over a corpus this small can only introduce wrong chunks. That
+  argument never depended on price.
+- **Prompt caching: no longer load-bearing.** On Claude, cache reads at ~10% of
+  input price were what made stuffing the whole knowledge base *cheaper* than
+  retrieving. Free inference removes the cost argument entirely. Gemini does
+  implicit prefix caching and usage reports it, but nothing depends on it. The
+  byte-stable-prefix discipline stays for a different reason: a prompt that
+  varies per request makes the eval set meaningless.
+- **The binding constraint moved from dollars to requests.** Free tier is
+  roughly 1,500 requests/day; our own cap (~500/day) still bites first.
+- **The eval set earned its keep.** Swapping the model behind a prompt tuned
+  for a different one is exactly the change that silently degrades grounding
+  and injection resistance. 37 cases across five groups is the difference
+  between knowing and hoping.
+
+**The cost of the free tier, stated plainly:** Google uses free-tier input to
+improve their models. Visitors are typing into a box that hands text to a third
+party, so the UI says so. On a site whose whole argument is that it does not
+overstate things, that disclosure is not optional.

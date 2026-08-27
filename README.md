@@ -114,3 +114,45 @@ Live at **https://anishdevlops.xyz**. Pushing to `main` on
 - After changing DNS, a local resolver can serve the old IP until its TTL
   expires. `dig @8.8.8.8 anishdevlops.xyz` shows the truth;
   `sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder` fixes the Mac.
+
+## The AI assistant
+
+A visitor can ask about my experience, projects or background and get an answer
+from a fixed set of facts — or an honest "I don't have that" pointing at the
+contact form. Lives at `/api/chat`, rendered by the panel in section 01.
+
+| File | Role |
+|---|---|
+| `src/lib/knowledge.ts` | Knowledge base + system prompt, assembled once at module load |
+| `src/lib/model.ts` | Everything provider-specific (model choice, streaming, error mapping) |
+| `src/lib/rate-limit.ts` | Per-IP limits and a global daily cap, in Upstash |
+| `src/lib/questions.ts` | Question logging, PII-redacted |
+| `evals/cases.mjs` | 37 eval cases across five groups |
+
+**No RAG, on purpose.** The knowledge base is ~4.2k tokens. It fits in the
+system prompt, so retrieval could only add a similarity-search step that
+sometimes fetches the wrong chunk — a wrong answer about a real person's
+career. Worth revisiting at roughly 50k tokens of source material.
+
+**Facts derive from `content.ts`** wherever the site already publishes them, so
+editing site copy updates the assistant in the same commit.
+
+### Verifying it
+
+```bash
+pnpm dev            # in one terminal
+pnpm verify:chat    # grounding, streaming, multi-turn
+pnpm verify:limits  # rate limits (see the header of that file for setup)
+pnpm eval           # 37 cases: factual, unknown, off-topic, injection, adversarial
+pnpm questions      # what visitors have actually asked
+```
+
+`pnpm eval` exits non-zero, so it can gate a deploy. Runs are free but paced:
+the provider's free tier has a per-model request ceiling, so the suite backs
+off on 429 and a full run takes a couple of minutes.
+
+### Environment
+
+`GEMINI_API_KEY`, `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`. See
+`.env.example`. Paste values **without** surrounding quotes — dotenv strips them
+locally, which hides a quoted value until it breaks in production.

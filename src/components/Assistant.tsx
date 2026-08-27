@@ -18,6 +18,7 @@ type Turn = { role: "user" | "assistant"; content: string };
 async function readStream(
   body: ReadableStream<Uint8Array>,
   onDelta: (text: string) => void,
+  onReset: () => void,
 ): Promise<{ error?: string }> {
   const reader = body.getReader();
   const decoder = new TextDecoder();
@@ -42,6 +43,9 @@ async function readStream(
         continue; // a malformed frame shouldn't kill the whole answer
       }
 
+      // The stream died and the server is re-answering from scratch. Throw
+      // away the partial text rather than appending to it.
+      if (event.type === "reset") onReset();
       if (event.type === "delta" && event.text) onDelta(event.text);
       // The stream is already a 200 by this point, so a mid-answer failure
       // arrives here rather than as a status code.
@@ -134,10 +138,17 @@ export function Assistant() {
         return;
       }
 
-      const result = await readStream(response.body, (delta) => {
-        answer += delta;
-        setPartial(answer);
-      });
+      const result = await readStream(
+        response.body,
+        (delta) => {
+          answer += delta;
+          setPartial(answer);
+        },
+        () => {
+          answer = "";
+          setPartial("");
+        },
+      );
 
       if (result.error) {
         setError(result.error);
