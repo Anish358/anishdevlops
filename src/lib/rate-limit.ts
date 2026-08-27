@@ -1,6 +1,7 @@
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 import { createHash } from "node:crypto";
+import { env, requireEnv } from "@/lib/env";
 
 /**
  * Spend controls for /api/chat.
@@ -27,10 +28,10 @@ const num = (value: string | undefined, fallback: number) => {
 };
 
 const LIMITS = {
-  ipPerHour: num(process.env.CHAT_IP_PER_HOUR, 10),
-  ipPerDay: num(process.env.CHAT_IP_PER_DAY, 30),
-  /** ~500 answers/day is roughly $3 at Sonnet 5's promotional rate. */
-  globalPerDay: num(process.env.CHAT_GLOBAL_PER_DAY, 500),
+  ipPerHour: num(env("CHAT_IP_PER_HOUR"), 10),
+  ipPerDay: num(env("CHAT_IP_PER_DAY"), 30),
+  /** At ~$0.008/question this is roughly $4/day worst case — see README. */
+  globalPerDay: num(env("CHAT_GLOBAL_PER_DAY"), 500),
 } as const;
 
 /**
@@ -60,8 +61,8 @@ function getLimiters() {
   if (limiters) return limiters;
 
   const redis = new Redis({
-    url: process.env.UPSTASH_REDIS_REST_URL!,
-    token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+    url: requireEnv("UPSTASH_REDIS_REST_URL"),
+    token: requireEnv("UPSTASH_REDIS_REST_TOKEN"),
   });
 
   const sliding = (tokens: number, window: "1 h" | "1 d", prefix: string) =>

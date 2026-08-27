@@ -3,6 +3,7 @@ import { after, NextResponse } from "next/server";
 import { SYSTEM_PROMPT } from "@/lib/knowledge";
 import { logQuestion } from "@/lib/questions";
 import { checkLimits } from "@/lib/rate-limit";
+import { env } from "@/lib/env";
 
 /**
  * Phase 1: non-streaming, so answers can be verified with curl before the
@@ -33,9 +34,9 @@ type Turn = { role: "user" | "assistant"; content: string };
  * and `pnpm verify:chat` test those.
  */
 const MOCK =
-  process.env.CHAT_MOCK === "1" && process.env.NODE_ENV !== "production";
+  env("CHAT_MOCK") === "1" && process.env.NODE_ENV !== "production";
 
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+const client = new Anthropic({ apiKey: env("ANTHROPIC_API_KEY") });
 
 const fail = (error: string, status: number) =>
   NextResponse.json({ error }, { status });
@@ -284,7 +285,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ mock: true, reply, usage, stopReason: "end_turn" });
   }
 
-  if (!process.env.ANTHROPIC_API_KEY) {
+  if (!env("ANTHROPIC_API_KEY")) {
     console.error("[chat] ANTHROPIC_API_KEY is not set — cannot answer.");
     return fail(
       "The assistant isn't wired up yet. Please use the contact form to reach Anish directly.",
