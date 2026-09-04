@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+<style>
+  html { -webkit-font-smoothing: antialiased; }
+  body { margin: 0; background: #F5F4F0; color: #111111; font-family: Archivo, Helvetica, sans-serif; }
+  * { box-sizing: border-box; }
+  ::selection { background: oklch(0.46 0.19 258); color: #F5F4F0; }
+  a { color: oklch(0.46 0.19 258); text-decoration: none; }
+  a:hover { color: #111111; }
+  input { font-family: inherit; }
+  @keyframes caret { 0%, 45% { opacity: 1; } 50%, 100% { opacity: 0; } }
+</style>
+</helmet>
+
+<div style="min-height: 100vh; background: #F5F4F0; background-image: radial-gradient(rgba(17,17,17,0.016) 1px, transparent 1px); background-size: 5px 5px; padding: 0 clamp(20px, 5.5vw, 88px);">
+
+  <header style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 14px 32px; padding: 30px 0 22px; border-bottom: 1px solid rgba(17,17,17,0.14);">
+    <div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px clamp(14px, 2vw, 24px);">
+      <a href="Anish Shejawale - Homepage.dc.html" style="font-family: Archivo, sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.16em; color: #111111;">← ANISH SHEJAWALE</a>
+      <span style="font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.14em; color: #6E6B65;">CASE STUDY 01 / SELECTED WORK</span>
+    </div>
+    <nav style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 12px clamp(16px, 2.4vw, 38px); font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.14em;">
+      <a href="Anish Shejawale - Homepage.dc.html#work" style="color: #6E6B65;" style-hover="color: #111111;">WORK</a>
+      <a href="Anish Shejawale - Homepage.dc.html#contact" style="color: #6E6B65;" style-hover="color: #111111;">CONTACT</a>
+      <button onClick="{{ openPalette }}" style="font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.14em; color: oklch(0.46 0.19 258); background: transparent; border: 1px solid rgba(27,59,217,0.35); border-radius: 2px; padding: 6px 11px; cursor: pointer; transition: background 180ms ease, color 180ms ease;" style-hover="background: oklch(0.46 0.19 258); color: #F5F4F0; border-color: oklch(0.46 0.19 258);"><span style="font-family: 'Space Mono', 'Segoe UI Symbol', 'Apple Symbols', system-ui, sans-serif;">⌘</span> ASK</button>
+    </nav>
+  </header>
+
+  <section style="display: flex; flex-wrap: wrap; align-items: flex-start; gap: clamp(30px, 5vw, 80px); padding: clamp(44px, 9vh, 100px) 0 0;">
+    <div style="flex: 4 1 min(100%, 480px);">
+      <div style="font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: 24px;">FLAGSHIP / LIVE IN PRODUCTION</div>
+      <h1 style="margin: 0; font-size: clamp(46px, 9.4vw, 150px); font-weight: 600; letter-spacing: -0.045em; line-height: 0.86;">PROPVEXIS</h1>
+      <div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 16px; padding: 24px 0 22px; border-bottom: 1px solid rgba(17,17,17,0.14);">
+        <span style="font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 0.2em; color: #111111;">RISK MANAGEMENT FOR FUNDED TRADERS</span>
+        <span style="flex: 1 1 40px; height: 1px; background: rgba(17,17,17,0.18);"></span>
+        <span style="font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.14em; color: #6E6B65;">2025 —</span>
+      </div>
+      <p style="margin: 0; padding: 28px 0 0; font-size: clamp(20px, 2.05vw, 31px); line-height: 1.32; letter-spacing: -0.015em; max-width: 30ch; text-wrap: pretty;">Real-time drawdown tracking that tells a trader where they stand right now, not what happened yesterday.</p>
+    </div>
+
+    <aside style="flex: 1 1 min(100%, 250px); border-left: 1px solid rgba(17,17,17,0.14); padding-left: clamp(16px, 2vw, 30px); font-family: 'Space Mono', monospace;">
+      <div style="padding-bottom: 20px; border-bottom: 1px solid rgba(17,17,17,0.1);">
+        <div style="font-size: 10px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: 9px;">STATUS</div>
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 11.5px; letter-spacing: 0.09em; color: #111111;">
+          <span style="width: 6px; height: 6px; border-radius: 50%; background: oklch(0.46 0.19 258);"></span>
+          LIVE IN PRODUCTION
+        </div>
+      </div>
+      <div style="padding: 20px 0; border-bottom: 1px solid rgba(17,17,17,0.1);">
+        <div style="font-size: 10px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: 9px;">LIVE SITE</div>
+        <a href="https://app.propvexis.com" style="font-size: 12.5px;">app.propvexis.com</a>
+      </div>
+      <div style="padding: 20px 0; border-bottom: 1px solid rgba(17,17,17,0.1);">
+        <div style="font-size: 10px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: 9px;">GITHUB</div>
+        <a href="https://github.com/Anish358/propvexis" style="font-size: 12.5px; overflow-wrap: anywhere;">github.com/Anish358/propvexis</a>
+      </div>
+      <div style="padding: 20px 0 0;">
+        <div style="font-size: 10px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: 9px;">STACK</div>
+        <div style="font-size: 12px; line-height: 1.75; color: #111111;">Node.js · Fastify · PostgreSQL · Redis · Socket.IO · React · MQL5 · AWS · Docker · Terraform · GitHub Actions</div>
+      </div>
+    </aside>
+  </section>
+
+  <section style="padding: clamp(52px, 10vh, 112px) 0 0;">
+    <div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: clamp(24px, 4vh, 46px);">
+      <span>01 / THE PROBLEM</span>
+      <span>01 — 06</span>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; gap: 16px clamp(18px, 3vw, 48px); border-top: 1px solid rgba(17,17,17,0.14); padding-top: clamp(24px, 3.4vh, 38px);">
+      <div style="flex: 1 1 min(100%, 150px); font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.16em; color: #111111; padding-top: 9px;">ONE SHOT</div>
+      <p style="flex: 4 1 min(100%, 340px); margin: 0; font-size: clamp(20px, 2.3vw, 30px); font-weight: 500; letter-spacing: -0.022em; line-height: 1.36; color: #111111; max-width: 44ch; text-wrap: pretty;">Traders on funded prop accounts get one shot at a strict rule set — breach the daily or maximum drawdown and the account is gone. Most of them track it in spreadsheets that tell them what happened yesterday, not that they are 0.4% away from losing the account right now.</p>
+    </div>
+  </section>
+
+  <section style="padding: clamp(52px, 10vh, 112px) 0 0;">
+    <div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: clamp(24px, 4vh, 46px);">
+      <span>02 / HOW IT FITS TOGETHER</span>
+      <span>DATA PATH</span>
+    </div>
+    <div style="border-top: 1px solid rgba(17,17,17,0.14); padding-top: clamp(24px, 3.4vh, 34px);">
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: 26px;">
+        <span>FIG. 01 — CLOSED TRADE FROM TERMINAL TO SCREEN</span>
+        <span>WRITE PATH / IDEMPOTENT</span>
+      </div>
+      <svg viewBox="0 0 1200 172" preserveAspectRatio="xMidYMid meet" style="width: 100%; height: auto; display: block;">
+        <g stroke="rgba(17,17,17,0.26)" stroke-width="1" fill="none">
+          <line x1="72" y1="86" x2="300" y2="86" />
+          <line x1="300" y1="86" x2="560" y2="46" />
+          <line x1="300" y1="86" x2="560" y2="126" />
+          <line x1="560" y1="46" x2="800" y2="86" />
+          <line x1="560" y1="126" x2="800" y2="86" />
+          <line x1="800" y1="86" x2="1060" y2="86" />
+        </g>
+        <g stroke="oklch(0.46 0.19 258)" stroke-width="1" stroke-dasharray="3 5" fill="none">
+          <line x1="560" y1="46" x2="560" y2="126" />
+        </g>
+        <g fill="#F5F4F0" stroke="#111111" stroke-width="1">
+          <circle cx="72" cy="86" r="4" />
+          <circle cx="300" cy="86" r="4" />
+          <circle cx="800" cy="86" r="4" />
+          <circle cx="1060" cy="86" r="4" />
+        </g>
+        <g fill="oklch(0.46 0.19 258)" stroke="none">
+          <circle cx="560" cy="46" r="4" />
+          <circle cx="560" cy="126" r="4" />
+        </g>
+        <g fill="#111111" font-family="Space Mono, monospace" font-size="10.5" letter-spacing="1.6">
+          <text x="72" y="108" text-anchor="start">MT5 AGENT</text>
+          <text x="300" y="108" text-anchor="middle">INGEST API</text>
+          <text x="560" y="34" text-anchor="middle">POSTGRESQL</text>
+          <text x="560" y="146" text-anchor="middle">REDIS</text>
+          <text x="800" y="108" text-anchor="middle">RULE ENGINE</text>
+          <text x="1060" y="108" text-anchor="end">BROWSER</text>
+        </g>
+        <g fill="#6E6B65" font-family="Space Mono, monospace" font-size="9" letter-spacing="1.2">
+          <text x="72" y="124" text-anchor="start">MQL5</text>
+          <text x="300" y="124" text-anchor="middle">Fastify · idempotent</text>
+          <text x="560" y="20" text-anchor="middle">CTEs · composite idx</text>
+          <text x="560" y="162" text-anchor="middle">cache · pub/sub</text>
+          <text x="800" y="124" text-anchor="middle">drawdown · targets</text>
+          <text x="1060" y="124" text-anchor="end">WebSockets</text>
+        </g>
+      </svg>
+      <p style="margin: 0; padding-top: clamp(22px, 3vh, 32px); font-size: 16.5px; line-height: 1.72; color: #35322D; max-width: 62ch; text-wrap: pretty;">A closed trade leaves MetaTrader 5 and is on the trader's screen in under a second. Every hop is idempotent, so nothing double-counts on retry.</p>
+    </div>
+  </section>
+
+  <section style="padding: clamp(52px, 10vh, 112px) 0 0;">
+    <div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: clamp(24px, 4vh, 46px);">
+      <span>03 / WHAT IT DOES</span>
+      <span>04 FEATURES</span>
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 16px clamp(18px, 3vw, 48px); border-top: 1px solid rgba(17,17,17,0.14); padding: clamp(22px, 3.2vh, 34px) 0;">
+      <div style="flex: 1 1 min(100%, 150px); font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.16em; color: #6E6B65; padding-top: 7px;">01</div>
+      <div style="flex: 4 1 min(100%, 340px);">
+        <h2 style="margin: 0; font-size: clamp(21px, 2.4vw, 32px); font-weight: 500; letter-spacing: -0.022em; line-height: 1.12;">Real-time ingestion end to end</h2>
+        <p style="margin: 0; padding-top: 14px; font-size: 16.5px; line-height: 1.72; color: #35322D; max-width: 62ch; text-wrap: pretty;">An MQL5 agent inside MetaTrader 5 posts each closed trade to a Fastify ingest endpoint. The write is deduplicated on the broker's own ticket id, published over Redis pub/sub and pushed to any open browser session with Socket.IO. There is no polling anywhere in the path, and a trader watching an open account sees the equity curve move as positions close.</p>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 16px clamp(18px, 3vw, 48px); border-top: 1px solid rgba(17,17,17,0.12); padding: clamp(22px, 3.2vh, 34px) 0;">
+      <div style="flex: 1 1 min(100%, 150px); font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.16em; color: #6E6B65; padding-top: 7px;">02</div>
+      <div style="flex: 4 1 min(100%, 340px);">
+        <h2 style="margin: 0; font-size: clamp(21px, 2.4vw, 32px); font-weight: 500; letter-spacing: -0.022em; line-height: 1.12;">A configurable rule engine</h2>
+        <p style="margin: 0; padding-top: 14px; font-size: 16.5px; line-height: 1.72; color: #35322D; max-width: 62ch; text-wrap: pretty;">Every prop firm writes its rules differently: daily drawdown measured from balance or from equity, maximum drawdown static or trailing, profit targets and minimum trading days. Each firm's rule set is stored as data and evaluated against the account after every trade, so the engine reports distance to breach rather than a verdict after the fact.</p>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 16px clamp(18px, 3vw, 48px); border-top: 1px solid rgba(17,17,17,0.12); padding: clamp(22px, 3.2vh, 34px) 0;">
+      <div style="flex: 1 1 min(100%, 150px); font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.16em; color: #6E6B65; padding-top: 7px;">03</div>
+      <div style="flex: 4 1 min(100%, 340px);">
+        <h2 style="margin: 0; font-size: clamp(21px, 2.4vw, 32px); font-weight: 500; letter-spacing: -0.022em; line-height: 1.12;">Analytics moved into the database</h2>
+        <p style="margin: 0; padding-top: 14px; font-size: 16.5px; line-height: 1.72; color: #35322D; max-width: 62ch; text-wrap: pretty;">Equity curves, win rate, expectancy and per-session breakdowns are computed in PostgreSQL with common table expressions over composite indexes, not assembled in application memory. The API returns a shaped result rather than a page of rows, which keeps response payloads small and the numbers consistent between views.</p>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 16px clamp(18px, 3vw, 48px); border-top: 1px solid rgba(17,17,17,0.12); border-bottom: 1px solid rgba(17,17,17,0.14); padding: clamp(22px, 3.2vh, 34px) 0;">
+      <div style="flex: 1 1 min(100%, 150px); font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.16em; color: #6E6B65; padding-top: 7px;">04</div>
+      <div style="flex: 4 1 min(100%, 340px);">
+        <h2 style="margin: 0; font-size: clamp(21px, 2.4vw, 32px); font-weight: 500; letter-spacing: -0.022em; line-height: 1.12;">Multi-tenancy and billing</h2>
+        <p style="margin: 0; padding-top: 14px; font-size: 16.5px; line-height: 1.72; color: #35322D; max-width: 62ch; text-wrap: pretty;">Accounts, trades and rule sets are scoped per tenant at the row level, with subscription tiers gating account limits and history depth. Billing state and entitlement checks live behind the same API surface as the rest of the product, so a plan change takes effect on the next request rather than on the next deploy.</p>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding: clamp(56px, 11vh, 124px) 0 0;">
+    <div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: clamp(22px, 3.4vh, 36px);">
+      <span>04 / TRADE-OFFS</span>
+      <span>06 DECISIONS</span>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; gap: clamp(20px, 4vw, 64px); border-top: 1px solid rgba(17,17,17,0.14); padding-top: clamp(24px, 3.6vh, 40px);">
+      <h2 style="flex: 2 1 min(100%, 280px); margin: 0; font-size: clamp(30px, 4.6vw, 62px); font-weight: 600; letter-spacing: -0.04em; line-height: 0.94;">WHAT I CHOSE, AND WHAT IT COST.</h2>
+      <p style="flex: 3 1 min(100%, 320px); margin: 0; align-self: flex-end; font-size: 16.5px; line-height: 1.72; color: #35322D; max-width: 56ch; text-wrap: pretty;">Six decisions where the alternative was reasonable and I picked the other one. Each of these is a constraint the system now lives with.</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 1px; background: rgba(17,17,17,0.14); margin-top: clamp(28px, 4.5vh, 50px); border-top: 1px solid rgba(17,17,17,0.14); border-bottom: 1px solid rgba(17,17,17,0.14);">
+      <div style="background: #F5F4F0; padding: clamp(24px, 3vw, 34px) clamp(20px, 2.4vw, 32px);">
+        <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: oklch(0.46 0.19 258); padding-bottom: 14px;">01 / DELIVERY</div>
+        <h3 style="margin: 0; font-size: clamp(19px, 1.9vw, 24px); font-weight: 500; letter-spacing: -0.02em; line-height: 1.2;">Idempotent ingest, not at-most-once delivery</h3>
+        <p style="margin: 0; padding-top: 12px; font-size: 15.5px; line-height: 1.68; color: #35322D; text-wrap: pretty;">The agent retries whenever the network drops, which means the same trade can arrive several times. Deduplicating on the broker ticket id at write time makes replays harmless, at the cost of a uniqueness constraint the ingest path has to honour and a slightly heavier write.</p>
+      </div>
+      <div style="background: #F5F4F0; padding: clamp(24px, 3vw, 34px) clamp(20px, 2.4vw, 32px);">
+        <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: oklch(0.46 0.19 258); padding-bottom: 14px;">02 / RULES</div>
+        <h3 style="margin: 0; font-size: clamp(19px, 1.9vw, 24px); font-weight: 500; letter-spacing: -0.02em; line-height: 1.2;">Rule sets as data, not code</h3>
+        <p style="margin: 0; padding-top: 12px; font-size: 15.5px; line-height: 1.68; color: #35322D; text-wrap: pretty;">Encoding each firm's rules in application logic would have been faster to write and impossible to maintain past the third firm. Storing them as data means onboarding a firm is a row rather than a release, and it means the engine has to validate configurations it has never seen.</p>
+      </div>
+      <div style="background: #F5F4F0; padding: clamp(24px, 3vw, 34px) clamp(20px, 2.4vw, 32px);">
+        <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: oklch(0.46 0.19 258); padding-bottom: 14px;">03 / AGGREGATION</div>
+        <h3 style="margin: 0; font-size: clamp(19px, 1.9vw, 24px); font-weight: 500; letter-spacing: -0.02em; line-height: 1.2;">Aggregation in PostgreSQL, not in Node</h3>
+        <p style="margin: 0; padding-top: 12px; font-size: 15.5px; line-height: 1.68; color: #35322D; text-wrap: pretty;">Pulling rows into the application and reducing them there is easier to read and gets slow as history grows. Keeping the work in SQL trades that readability for stable latency, and puts the burden on indexes and query plans that have to be maintained deliberately.</p>
+      </div>
+      <div style="background: #F5F4F0; padding: clamp(24px, 3vw, 34px) clamp(20px, 2.4vw, 32px);">
+        <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: oklch(0.46 0.19 258); padding-bottom: 14px;">04 / CACHING</div>
+        <h3 style="margin: 0; font-size: clamp(19px, 1.9vw, 24px); font-weight: 500; letter-spacing: -0.02em; line-height: 1.2;">Invalidation over short TTLs</h3>
+        <p style="margin: 0; padding-top: 12px; font-size: 15.5px; line-height: 1.68; color: #35322D; text-wrap: pretty;">A short expiry would have been simpler, but a trader cannot be shown a drawdown figure that is thirty seconds stale. Cached reads are invalidated by the write that changes them, which means every write path has to know what it affects.</p>
+      </div>
+      <div style="background: #F5F4F0; padding: clamp(24px, 3vw, 34px) clamp(20px, 2.4vw, 32px);">
+        <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: oklch(0.46 0.19 258); padding-bottom: 14px;">05 / SESSIONS</div>
+        <h3 style="margin: 0; font-size: clamp(19px, 1.9vw, 24px); font-weight: 500; letter-spacing: -0.02em; line-height: 1.2;">httpOnly cookies over localStorage tokens</h3>
+        <p style="margin: 0; padding-top: 12px; font-size: 15.5px; line-height: 1.68; color: #35322D; text-wrap: pretty;">Tokens in localStorage are convenient for the client and readable by any script that gets onto the page. Cookies the browser will not hand to JavaScript remove that class of theft, and in exchange require CSRF protection and explicit cross-origin handling.</p>
+      </div>
+      <div style="background: #F5F4F0; padding: clamp(24px, 3vw, 34px) clamp(20px, 2.4vw, 32px);">
+        <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: oklch(0.46 0.19 258); padding-bottom: 14px;">06 / TENANCY</div>
+        <h3 style="margin: 0; font-size: clamp(19px, 1.9vw, 24px); font-weight: 500; letter-spacing: -0.02em; line-height: 1.2;">Row-level tenant scoping over schema-per-tenant</h3>
+        <p style="margin: 0; padding-top: 12px; font-size: 15.5px; line-height: 1.68; color: #35322D; text-wrap: pretty;">A schema per tenant isolates data firmly and turns every migration into an operation across N schemas. Scoping by tenant id on the row keeps migrations single and moves the burden onto query discipline: no read path is allowed to omit the scope.</p>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding: clamp(52px, 10vh, 112px) 0 0;">
+    <div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: clamp(24px, 4vh, 42px);">
+      <span>05 / PIPELINE</span>
+      <span>05 STAGES / GITHUB ACTIONS</span>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; border-top: 1px solid rgba(17,17,17,0.14); border-bottom: 1px solid rgba(17,17,17,0.14); padding: clamp(22px, 3vh, 32px) 0; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.14em;">
+      <span style="display: flex; align-items: baseline; gap: 8px;"><span style="color: #111111;">TEST</span><span style="font-size: 9.5px; color: #6E6B65;">node:test suite</span></span>
+      <span style="flex: 1 1 20px; height: 1px; background: rgba(27,59,217,0.4);"></span>
+      <span style="display: flex; align-items: baseline; gap: 8px;"><span style="color: #111111;">BUILD</span><span style="font-size: 9.5px; color: #6E6B65;">frontend bundle</span></span>
+      <span style="flex: 1 1 20px; height: 1px; background: rgba(27,59,217,0.4);"></span>
+      <span style="display: flex; align-items: baseline; gap: 8px;"><span style="color: #111111;">SHIP</span><span style="font-size: 9.5px; color: #6E6B65;">rsync to EC2</span></span>
+      <span style="flex: 1 1 20px; height: 1px; background: rgba(27,59,217,0.4);"></span>
+      <span style="display: flex; align-items: baseline; gap: 8px;"><span style="color: #111111;">MIGRATE</span><span style="font-size: 9.5px; color: #6E6B65;">schema forward</span></span>
+      <span style="flex: 1 1 20px; height: 1px; background: rgba(27,59,217,0.4);"></span>
+      <span style="display: flex; align-items: baseline; gap: 8px;"><span style="color: #111111;">RELEASE</span><span style="font-size: 9.5px; color: #6E6B65;">pm2 restart</span></span>
+    </div>
+  </section>
+
+  <section style="padding: clamp(52px, 10vh, 112px) 0 0;">
+    <div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: clamp(24px, 4vh, 42px);">
+      <span>06 / INFRASTRUCTURE</span>
+      <span>03 ENVIRONMENTS</span>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; gap: clamp(24px, 4vw, 64px); border-top: 1px solid rgba(17,17,17,0.14); padding-top: clamp(24px, 3.4vh, 38px);">
+      <p style="flex: 3 1 min(100%, 340px); margin: 0; font-size: 16.5px; line-height: 1.72; color: #35322D; max-width: 62ch; text-wrap: pretty;">GitHub Actions CI/CD to AWS EC2, three isolated environments, secrets in SSM Parameter Store, Terraform, Docker, Prometheus/Grafana and Sentry, nightly S3 backups.</p>
+      <div style="flex: 2 1 min(100%, 240px);">
+        <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: 12px;">RUNTIME</div>
+        <div style="font-family: 'Space Mono', monospace; font-size: 11.5px; letter-spacing: 0.08em;">
+          <div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-top: 1px solid rgba(17,17,17,0.12);"><span style="color: #6E6B65;">HOST</span><span>AWS EC2</span></div>
+          <div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-top: 1px solid rgba(17,17,17,0.12);"><span style="color: #6E6B65;">ENVIRONMENTS</span><span>03</span></div>
+          <div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-top: 1px solid rgba(17,17,17,0.12);"><span style="color: #6E6B65;">SECRETS</span><span>SSM</span></div>
+          <div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-top: 1px solid rgba(17,17,17,0.12);"><span style="color: #6E6B65;">OBSERVABILITY</span><span>GRAFANA · SENTRY</span></div>
+          <div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-top: 1px solid rgba(17,17,17,0.12); border-bottom: 1px solid rgba(17,17,17,0.12);"><span style="color: #6E6B65;">BACKUPS</span><span style="color: oklch(0.46 0.19 258);">NIGHTLY / S3</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding: clamp(52px, 10vh, 112px) 0 0;">
+    <div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: clamp(24px, 4vh, 42px);">
+      <span>07 / WHAT'S NEXT</span>
+      <span>03 ITEMS</span>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; gap: 16px clamp(18px, 3vw, 48px); border-top: 1px solid rgba(17,17,17,0.14); padding: 20px 0;">
+      <div style="flex: 1 1 min(100%, 150px); font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.16em; color: #6E6B65;">01</div>
+      <div style="flex: 4 1 min(100%, 340px); font-size: 17px; line-height: 1.5; letter-spacing: -0.012em; color: #111111;">Move PostgreSQL to a managed instance</div>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; gap: 16px clamp(18px, 3vw, 48px); border-top: 1px solid rgba(17,17,17,0.12); padding: 20px 0;">
+      <div style="flex: 1 1 min(100%, 150px); font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.16em; color: #6E6B65;">02</div>
+      <div style="flex: 4 1 min(100%, 340px); font-size: 17px; line-height: 1.5; letter-spacing: -0.012em; color: #111111;">Containerise and run on Kubernetes with Terraform end to end</div>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; gap: 16px clamp(18px, 3vw, 48px); border-top: 1px solid rgba(17,17,17,0.12); border-bottom: 1px solid rgba(17,17,17,0.14); padding: 20px 0;">
+      <div style="flex: 1 1 min(100%, 150px); font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.16em; color: #6E6B65;">03</div>
+      <div style="flex: 4 1 min(100%, 340px); font-size: 17px; line-height: 1.5; letter-spacing: -0.012em; color: #111111;">Replace the equity-curve read path with a materialised view</div>
+    </div>
+  </section>
+
+  <nav style="padding: clamp(52px, 10vh, 112px) 0 0;">
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; padding: 20px 0; border-top: 1px solid rgba(17,17,17,0.14); font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.14em; color: #6E6B65;">
+      <span>END OF CASE STUDY</span>
+      <a href="Anish Shejawale - Homepage.dc.html#work">← ALL PROJECTS</a>
+    </div>
+    <a href="#top" style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px 32px; border-top: 1px solid rgba(17,17,17,0.14); border-bottom: 1px solid rgba(17,17,17,0.14); padding: clamp(28px, 4.5vh, 48px) 0; color: #111111;" style-hover="background: rgba(27,59,217,0.035);">
+      <div>
+        <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: 14px;">NEXT PROJECT — 02</div>
+        <div style="font-size: clamp(30px, 5vw, 68px); font-weight: 600; letter-spacing: -0.04em; line-height: 0.94;">LUXORA</div>
+      </div>
+      <div style="font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.14em; color: oklch(0.46 0.19 258); padding-bottom: 6px;">VIEW PROJECT →</div>
+    </a>
+  </nav>
+
+  <footer style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; margin-top: clamp(52px, 10vh, 110px); padding: 20px 0 30px; border-top: 1px solid rgba(17,17,17,0.14); font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.14em; color: #6E6B65;">
+    <span>ANISH SHEJAWALE — 2026</span>
+    <span style="color: #111111;">Built with curiosity.</span>
+  </footer>
+
+  <sc-if value="{{ paletteOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closePalette }}" style="position: fixed; inset: 0; background: rgba(17,17,17,0.42); display: flex; align-items: flex-start; justify-content: center; padding: clamp(48px, 13vh, 160px) 16px; z-index: 50;">
+      <div onClick="{{ stop }}" style="width: min(660px, 100%); background: #F5F4F0; color: #111111; border: 1px solid rgba(17,17,17,0.45); box-shadow: 0 28px 70px rgba(17,17,17,0.22);">
+        <form onSubmit="{{ submit }}" style="display: flex; align-items: center; gap: 12px; padding: 18px 22px; border-bottom: 1px solid rgba(17,17,17,0.14);">
+          <span style="font-family: 'Space Mono', monospace; font-size: 14px; color: oklch(0.46 0.19 258);">&gt;</span>
+          <input value="{{ q }}" onChange="{{ onQ }}" placeholder="Ask about this project, the stack, the trade-offs…" style="flex: 1; min-width: 0; border: none; background: transparent; outline: none; font-size: 17px; letter-spacing: -0.012em; color: #111111;" />
+          <span style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: #6E6B65;">ESC</span>
+        </form>
+        <div style="overflow: hidden; height: {{ answerH }}; opacity: {{ answerO }}; transition: height 400ms cubic-bezier(0.2,0.7,0.2,1), opacity 300ms ease; border-bottom: 1px solid rgba(17,17,17,0.14);">
+          <div style="padding: 18px 22px 20px;">
+            <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: 8px;">QUERY</div>
+            <p style="margin: 0 0 16px; font-size: 15px; font-weight: 500; letter-spacing: -0.012em; color: #111111;">{{ queryText }}</p>
+            <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: #6E6B65; border-top: 1px solid rgba(17,17,17,0.12); padding: 16px 0 10px;">{{ answerLabel }}</div>
+            <p style="margin: 0; font-size: 15px; line-height: 1.68; color: #35322D;">{{ answerText }}<span style="display: inline-block; width: 7px; height: 0.95em; margin-left: 3px; vertical-align: -0.1em; background: oklch(0.46 0.19 258); animation: caret 1s steps(1) infinite; opacity: {{ caretO }};"></span></p>
+          </div>
+        </div>
+        <div style="padding: 12px 0;">
+          <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: #6E6B65; padding: 8px 22px 10px;">SUGGESTED QUERIES</div>
+          <button onClick="{{ pick0 }}" style="display: flex; gap: 12px; width: 100%; text-align: left; background: transparent; border: none; cursor: pointer; padding: 11px 22px; font-family: 'Space Mono', monospace; font-size: 12.5px; color: #35322D;" style-hover="background: rgba(27,59,217,0.05); color: oklch(0.46 0.19 258);"><span style="color: #6E6B65;">01</span><span>What does PropVexis actually do?</span></button>
+          <button onClick="{{ pick1 }}" style="display: flex; gap: 12px; width: 100%; text-align: left; background: transparent; border: none; cursor: pointer; padding: 11px 22px; font-family: 'Space Mono', monospace; font-size: 12.5px; color: #35322D;" style-hover="background: rgba(27,59,217,0.05); color: oklch(0.46 0.19 258);"><span style="color: #6E6B65;">02</span><span>How does a trade reach the browser?</span></button>
+          <button onClick="{{ pick2 }}" style="display: flex; gap: 12px; width: 100%; text-align: left; background: transparent; border: none; cursor: pointer; padding: 11px 22px; font-family: 'Space Mono', monospace; font-size: 12.5px; color: #35322D;" style-hover="background: rgba(27,59,217,0.05); color: oklch(0.46 0.19 258);"><span style="color: #6E6B65;">03</span><span>What was the hardest trade-off?</span></button>
+          <button onClick="{{ pick3 }}" style="display: flex; gap: 12px; width: 100%; text-align: left; background: transparent; border: none; cursor: pointer; padding: 11px 22px; font-family: 'Space Mono', monospace; font-size: 12.5px; color: #35322D;" style-hover="background: rgba(27,59,217,0.05); color: oklch(0.46 0.19 258);"><span style="color: #6E6B65;">04</span><span>How is it deployed?</span></button>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding: 12px 22px; border-top: 1px solid rgba(17,17,17,0.14); font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: #6E6B65;">
+          <span style="display: flex; align-items: center; gap: 7px;"><span style="width: 5px; height: 5px; border-radius: 50%; background: oklch(0.46 0.19 258);"></span>{{ statusState }}</span><span><span style="font-family: 'Space Mono', 'Segoe UI Symbol', 'Apple Symbols', system-ui, sans-serif;">↵</span> TO ASK</span>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440}}">
+const ANSWERS = [
+  {
+    q: "What does PropVexis actually do?",
+    a: "It tracks a funded trading account against its prop firm's rule set in real time, reporting how far the account is from breaching daily or maximum drawdown rather than reporting the breach afterwards.",
+    src: "01 / THE PROBLEM"
+  },
+  {
+    q: "How does a trade reach the browser?",
+    a: "An MQL5 agent in MetaTrader 5 posts the closed trade to a Fastify ingest endpoint, deduplicated on the broker ticket id. The write lands in PostgreSQL, publishes over Redis, is evaluated by the rule engine and is pushed to open sessions over WebSockets — under a second end to end.",
+    src: "FIG. 01 / DATA PATH"
+  },
+  {
+    q: "What was the hardest trade-off?",
+    a: "Cache invalidation over short TTLs. Expiry would have been far simpler, but a drawdown figure thirty seconds stale is worse than useless, so every write path has to know which cached reads it affects.",
+    src: "04 / TRADE-OFFS"
+  },
+  {
+    q: "How is it deployed?",
+    a: "GitHub Actions to AWS EC2 across three isolated environments: test, build, ship, migrate, release. Secrets in SSM Parameter Store, Terraform and Docker for provisioning, Prometheus/Grafana and Sentry for observability, nightly S3 backups.",
+    src: "05 / PIPELINE · 06 / INFRASTRUCTURE"
+  }
+];
+
+class Component extends DCLogic {
+  state = { q: "", query: "", paletteOpen: false, typed: "", answer: null, thinking: false };
+
+  componentDidMount() {
+    this._key = (e) => {
+      if (e.key === "Escape") this.setState({ paletteOpen: false });
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        this.setState({ paletteOpen: true });
+      }
+    };
+    window.addEventListener("keydown", this._key);
+  }
+  componentWillUnmount() {
+    window.removeEventListener("keydown", this._key);
+    clearInterval(this._t); clearTimeout(this._d);
+  }
+
+  ask(question) {
+    clearInterval(this._t); clearTimeout(this._d);
+    const match = ANSWERS.find((x) => x.q.toLowerCase() === question.trim().toLowerCase());
+    const answer = match || {
+      a: "I can speak to what PropVexis does, how the data path works, the trade-offs behind it and how it ships. Try one of the suggested queries.",
+      src: "GENERAL"
+    };
+    this.setState({ q: "", query: question, answer, typed: "", thinking: true });
+    this._d = setTimeout(() => {
+      this.setState({ thinking: false });
+      let i = 0;
+      this._t = setInterval(() => {
+        i += 2;
+        if (i >= answer.a.length) { clearInterval(this._t); i = answer.a.length; }
+        this.setState({ typed: answer.a.slice(0, i) });
+      }, 16);
+    }, 420);
+  }
+
+  renderVals() {
+    const st = this.state;
+    const open = !!st.answer;
+    const pick = (i) => () => this.ask(ANSWERS[i].q);
+    return {
+      q: st.q,
+      queryText: st.query,
+      paletteOpen: st.paletteOpen,
+      onQ: (e) => this.setState({ q: e.target.value }),
+      submit: (e) => { e.preventDefault(); if (st.q.trim()) this.ask(st.q); },
+      openPalette: (e) => { e.preventDefault(); this.setState({ paletteOpen: true }); },
+      closePalette: () => this.setState({ paletteOpen: false }),
+      stop: (e) => e.stopPropagation(),
+      answerH: open ? "auto" : "0px",
+      answerO: open ? 1 : 0,
+      answerLabel: st.thinking ? "RETRIEVING CONTEXT…" : "RESPONSE",
+      answerText: st.typed,
+      statusState: st.thinking ? "RETRIEVING" : "READY",
+      caretO: st.answer && st.typed.length < st.answer.a.length ? 1 : 0,
+      pick0: pick(0), pick1: pick(1), pick2: pick(2), pick3: pick(3)
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+<style>
+  html { -webkit-font-smoothing: antialiased; }
+  body { margin: 0; background: #F5F4F0; color: #111111; font-family: Archivo, Helvetica, sans-serif; }
+  * { box-sizing: border-box; }
+  ::selection { background: oklch(0.46 0.19 258); color: #F5F4F0; }
+  a { color: oklch(0.46 0.19 258); text-decoration: none; }
+  a:hover { color: #111111; }
+  input { font-family: inherit; }
+  @keyframes caret { 0%, 45% { opacity: 1; } 50%, 100% { opacity: 0; } }
+</style>
+</helmet>
+
+<div style="min-height: 100vh; background: #F5F4F0; background-image: radial-gradient(rgba(17,17,17,0.016) 1px, transparent 1px); background-size: 5px 5px; padding: 0 clamp(20px, 5.5vw, 88px);">
+
+  <header style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 14px 32px; padding: 30px 0 22px; border-bottom: 1px solid rgba(17,17,17,0.14);">
+    <a href="#top" style="font-family: Archivo, sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.16em; color: #111111;">ANISH SHEJAWALE</a>
+    <nav style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 12px clamp(16px, 2.4vw, 38px); font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.14em;">
+      <a href="#work" style="color: #6E6B65;" style-hover="color: #111111;">WORK</a>
+      <a href="#experience" style="color: #6E6B65;" style-hover="color: #111111;">EXPERIENCE</a>
+      <a href="#about" style="color: #6E6B65;" style-hover="color: #111111;">ABOUT</a>
+      <a href="#contact" style="color: #6E6B65;" style-hover="color: #111111;">CONTACT</a>
+      <button onClick="{{ openPalette }}" style="font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.14em; color: oklch(0.46 0.19 258); background: transparent; border: 1px solid rgba(27,59,217,0.35); border-radius: 2px; padding: 6px 11px; cursor: pointer; transition: background 180ms ease, color 180ms ease;" style-hover="background: oklch(0.46 0.19 258); color: #F5F4F0; border-color: oklch(0.46 0.19 258);"><span style="font-family: 'Space Mono', 'Segoe UI Symbol', 'Apple Symbols', system-ui, sans-serif;">⌘</span> ASK</button>
+    </nav>
+  </header>
+
+  <section id="top" style="display: flex; flex-wrap: wrap; align-items: flex-start; gap: clamp(30px, 5vw, 80px); padding: clamp(44px, 9vh, 104px) 0 0;">
+    <div style="flex: 4 1 min(100%, 480px);">
+      <div style="font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: 24px;">PORTFOLIO / 2026</div>
+      <h1 style="margin: 0; font-family: Archivo, sans-serif; font-size: clamp(46px, 9.4vw, 158px); font-weight: 600; letter-spacing: -0.045em; line-height: 0.85;">ANISH<br />SHEJAWALE</h1>
+      <div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 16px; padding: 24px 0 22px; border-bottom: 1px solid rgba(17,17,17,0.14);">
+        <span style="font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 0.2em; color: #111111;">BACKEND ENGINEER</span>
+        <span style="flex: 1 1 40px; height: 1px; background: rgba(17,17,17,0.18);"></span>
+        <span style="font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.14em; color: #6E6B65;">IN / UTC+5:30</span>
+      </div>
+      <p style="margin: 0; padding: 28px 0 0; font-size: clamp(20px, 2.05vw, 31px); line-height: 1.32; letter-spacing: -0.015em; font-weight: 400; max-width: 26ch; text-wrap: pretty;">Building reliable systems, exploring cloud infrastructure, and applying AI to solve real problems.</p>
+    </div>
+
+    <aside style="flex: 1 1 min(100%, 240px); border-left: 1px solid rgba(17,17,17,0.14); padding-left: clamp(16px, 2vw, 30px); font-family: 'Space Mono', monospace;">
+      <div style="padding-bottom: 20px; border-bottom: 1px solid rgba(17,17,17,0.1);">
+        <div style="font-size: 10px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: 9px;">STATUS</div>
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 11.5px; letter-spacing: 0.09em; color: #111111;">
+          <span style="width: 6px; height: 6px; border-radius: 50%; background: oklch(0.46 0.19 258);"></span>
+          AVAILABLE FOR OPPORTUNITIES
+        </div>
+      </div>
+      <div style="padding: 20px 0; border-bottom: 1px solid rgba(17,17,17,0.1);">
+        <div style="font-size: 10px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: 9px;">FOCUS</div>
+        <div style="display: grid; gap: 5px; font-size: 12.5px; color: #111111;">
+          <span>Backend Systems</span>
+          <span>Cloud Infrastructure</span>
+          <span>Applied AI</span>
+        </div>
+      </div>
+      <div style="padding: 20px 0; border-bottom: 1px solid rgba(17,17,17,0.1);">
+        <div style="font-size: 10px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: 9px;">LOCATION</div>
+        <div style="font-size: 12.5px; color: #111111;">India</div>
+      </div>
+      <div style="padding: 20px 0 0;">
+        <div style="font-size: 10px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: 9px;">CURRENTLY BUILDING</div>
+        <div style="font-size: 12.5px; line-height: 1.5; color: #111111;">Real-time systems for trading infrastructure</div>
+      </div>
+    </aside>
+  </section>
+
+  <section style="padding: clamp(40px, 7vh, 82px) 0 clamp(34px, 6vh, 66px); border-bottom: 1px solid rgba(17,17,17,0.14);">
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: 22px;">
+      <span>FIG. 01 — HOW A TRADE MOVES THROUGH THE SYSTEM I'M BUILDING</span>
+      <span>WRITE PATH / REPLAYABLE</span>
+    </div>
+    <svg viewBox="0 0 1200 150" preserveAspectRatio="xMidYMid meet" style="width: 100%; height: auto; display: block; overflow: visible;">
+      <g stroke="rgba(17,17,17,0.26)" stroke-width="1" fill="none">
+        <line x1="60" y1="72" x2="300" y2="72" />
+        <line x1="300" y1="72" x2="560" y2="34" />
+        <line x1="300" y1="72" x2="560" y2="110" />
+        <line x1="560" y1="34" x2="830" y2="34" />
+        <line x1="830" y1="34" x2="1080" y2="72" />
+        <line x1="560" y1="110" x2="1080" y2="72" />
+      </g>
+      <g stroke="oklch(0.46 0.19 258)" stroke-width="1" stroke-dasharray="3 5" fill="none">
+        <path d="M 830 34 C 830 -6, 300 -6, 300 62" />
+      </g>
+      <g fill="#F5F4F0" stroke="#111111" stroke-width="1">
+        <circle cx="60" cy="72" r="4" />
+        <circle cx="300" cy="72" r="4" />
+        <circle cx="830" cy="34" r="4" />
+        <circle cx="1080" cy="72" r="4" />
+      </g>
+      <g fill="oklch(0.46 0.19 258)" stroke="none">
+        <circle cx="560" cy="34" r="4" />
+        <circle cx="560" cy="110" r="4" />
+      </g>
+      <g fill="#111111" font-family="Space Mono, monospace" font-size="10.5" letter-spacing="1.6">
+        <text x="60" y="94" text-anchor="start">BROKER FEED</text>
+        <text x="300" y="94" text-anchor="middle">API</text>
+        <text x="560" y="22" text-anchor="middle">QUEUE</text>
+        <text x="560" y="130" text-anchor="middle">CACHE</text>
+        <text x="830" y="22" text-anchor="middle">WORKER</text>
+        <text x="1080" y="94" text-anchor="end">TIMESERIES DB</text>
+      </g>
+      <g fill="#6E6B65" font-family="Space Mono, monospace" font-size="9" letter-spacing="1.2">
+        <text x="300" y="110" text-anchor="middle">idempotent writes</text>
+        <text x="560" y="146" text-anchor="middle">hot reads, 60s TTL</text>
+        <text x="830" y="8" text-anchor="middle">at-least-once</text>
+        <text x="1080" y="110" text-anchor="end">p95 ~40ms</text>
+      </g>
+      <text x="565" y="-2" text-anchor="middle" fill="oklch(0.46 0.19 258)" font-family="Space Mono, monospace" font-size="9" letter-spacing="1.2">replay on failure</text>
+    </svg>
+  </section>
+
+  <section id="work" style="padding: clamp(52px, 9vh, 100px) 0 0;">
+    <div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: clamp(24px, 4vh, 46px);">
+      <span>01 / SELECTED WORK</span>
+      <span>03 PROJECTS</span>
+    </div>
+
+    <a href="#work" onMouseEnter="{{ enter0 }}" onMouseLeave="{{ leave }}" style="display: flex; flex-wrap: wrap; gap: 14px clamp(18px, 3vw, 48px); align-items: flex-start; padding: clamp(24px, 3.4vh, 40px) 0; border-top: 1px solid rgba(17,17,17,0.14); color: #111111; background: {{ bg0 }}; transition: background 260ms ease;">
+      <div style="flex: 3 1 min(100%, 420px); display: flex; gap: clamp(14px, 2vw, 26px);">
+        <span style="font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.16em; color: #6E6B65; padding-top: 12px; transform: translateX({{ shift0 }}); transition: transform 300ms cubic-bezier(0.2,0.7,0.2,1);">01</span>
+        <div style="min-width: 0;">
+          <h2 style="margin: 0; font-size: clamp(28px, 4.6vw, 66px); font-weight: 600; letter-spacing: -0.035em; line-height: 0.96;">TRADE JOURNAL PLATFORM</h2>
+          <div style="font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.12em; color: oklch(0.46 0.19 258); padding-top: 18px; transform: translateX({{ shift0 }}); transition: transform 300ms cubic-bezier(0.2,0.7,0.2,1);">→ VIEW CASE STUDY</div>
+        </div>
+      </div>
+      <div style="flex: 2 1 min(100%, 280px); padding-top: 6px;">
+        <p style="margin: 0; font-size: 15.5px; line-height: 1.55; color: #35322D; max-width: 42ch; text-wrap: pretty;">Real-time trading infrastructure designed for synchronizing trades, processing events, and generating analytics.</p>
+        <div style="font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.1em; color: #6E6B65; padding-top: 14px;">TypeScript · Redis · PostgreSQL · AWS</div>
+        <div style="overflow: hidden; height: {{ h0 }}; opacity: {{ o0 }}; transition: height 340ms cubic-bezier(0.2,0.7,0.2,1), opacity 260ms ease;">
+          <div style="border-top: 1px solid rgba(17,17,17,0.12); margin-top: 16px; padding-top: 14px; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: #6E6B65;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span>INGEST</span><span style="flex: 1; height: 1px; background: rgba(27,59,217,0.4);"></span><span>MATCH</span><span style="flex: 1; height: 1px; background: rgba(27,59,217,0.4);"></span><span>ANALYTICS</span>
+            </div>
+            <div style="padding-top: 10px; color: #35322D; letter-spacing: 0.08em;">18k events/day · 3 services · single-writer ledger</div>
+          </div>
+        </div>
+      </div>
+    </a>
+
+    <a href="#work" onMouseEnter="{{ enter1 }}" onMouseLeave="{{ leave }}" style="display: flex; flex-wrap: wrap; gap: 14px clamp(18px, 3vw, 48px); align-items: flex-start; padding: clamp(24px, 3.4vh, 40px) 0; border-top: 1px solid rgba(17,17,17,0.14); color: #111111; background: {{ bg1 }}; transition: background 260ms ease;">
+      <div style="flex: 3 1 min(100%, 420px); display: flex; gap: clamp(14px, 2vw, 26px);">
+        <span style="font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.16em; color: #6E6B65; padding-top: 12px; transform: translateX({{ shift1 }}); transition: transform 300ms cubic-bezier(0.2,0.7,0.2,1);">02</span>
+        <div style="min-width: 0;">
+          <h2 style="margin: 0; font-size: clamp(28px, 4.6vw, 66px); font-weight: 600; letter-spacing: -0.035em; line-height: 0.96;">STOREIT</h2>
+          <div style="font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.12em; color: oklch(0.46 0.19 258); padding-top: 18px; transform: translateX({{ shift1 }}); transition: transform 300ms cubic-bezier(0.2,0.7,0.2,1);">→ VIEW PROJECT</div>
+        </div>
+      </div>
+      <div style="flex: 2 1 min(100%, 280px); padding-top: 6px;">
+        <p style="margin: 0; font-size: 15.5px; line-height: 1.55; color: #35322D; max-width: 42ch; text-wrap: pretty;">A cloud storage platform inspired by modern file management systems.</p>
+        <div style="font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.1em; color: #6E6B65; padding-top: 14px;">Next.js · TypeScript · Backend Infrastructure</div>
+        <div style="overflow: hidden; height: {{ h1 }}; opacity: {{ o1 }}; transition: height 340ms cubic-bezier(0.2,0.7,0.2,1), opacity 260ms ease;">
+          <div style="border-top: 1px solid rgba(17,17,17,0.12); margin-top: 16px; padding-top: 14px; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: #6E6B65;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span>UPLOAD</span><span style="flex: 1; height: 1px; background: rgba(27,59,217,0.4);"></span><span>STORE</span><span style="flex: 1; height: 1px; background: rgba(27,59,217,0.4);"></span><span>SHARE</span>
+            </div>
+            <div style="padding-top: 10px; color: #35322D; letter-spacing: 0.08em;">signed URLs · chunked uploads · per-file ACLs</div>
+          </div>
+        </div>
+      </div>
+    </a>
+
+    <a href="#work" onMouseEnter="{{ enter2 }}" onMouseLeave="{{ leave }}" style="display: flex; flex-wrap: wrap; gap: 14px clamp(18px, 3vw, 48px); align-items: flex-start; padding: clamp(24px, 3.4vh, 40px) 0 0; border-top: 1px solid rgba(17,17,17,0.14); color: #111111; max-height: {{ maxH2 }}; overflow: hidden; transition: max-height 380ms cubic-bezier(0.2,0.7,0.2,1);">
+      <div style="flex: 3 1 min(100%, 420px); display: flex; gap: clamp(14px, 2vw, 26px);">
+        <span style="font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.16em; color: #6E6B65; padding-top: 12px;">03</span>
+        <div style="min-width: 0;">
+          <h2 style="margin: 0; font-size: clamp(28px, 4.6vw, 66px); font-weight: 600; letter-spacing: -0.035em; line-height: 0.96;">EVENT PIPELINE TOOLKIT</h2>
+          <div style="font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.12em; color: oklch(0.46 0.19 258); padding-top: 18px;">→ VIEW PROJECT</div>
+        </div>
+      </div>
+      <div style="flex: 2 1 min(100%, 280px); padding-top: 6px;">
+        <p style="margin: 0; font-size: 15.5px; line-height: 1.55; color: #35322D; max-width: 42ch; text-wrap: pretty;">Queue-backed services for reliable event processing and replay.</p>
+        <div style="font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.1em; color: #6E6B65; padding-top: 14px;">Go · Kafka · Docker</div>
+      </div>
+    </a>
+    <div style="height: 34px; background: linear-gradient(to bottom, rgba(245,244,240,0), #F5F4F0); margin-top: -34px; position: relative; pointer-events: none;"></div>
+
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; padding: 20px 0; border-top: 1px solid rgba(17,17,17,0.14); font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.14em; color: #6E6B65;">
+      <span>ARCHIVE</span>
+      <a href="#work">→ ALL PROJECTS</a>
+    </div>
+  </section>
+
+  <section id="experience" style="padding: clamp(56px, 10vh, 118px) 0 0;">
+    <div style="font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: clamp(24px, 4vh, 46px);">02 / EXPERIENCE</div>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 16px clamp(18px, 3vw, 48px); padding: clamp(24px, 3.4vh, 38px) 0; border-top: 1px solid rgba(17,17,17,0.14);">
+      <div style="flex: 1 1 min(100%, 150px); font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.16em; color: #111111; padding-top: 7px;">2025 — PRESENT</div>
+      <div style="flex: 2.4 1 min(100%, 320px);">
+        <h3 style="margin: 0; font-size: clamp(21px, 2.5vw, 34px); font-weight: 500; letter-spacing: -0.02em; line-height: 1.05;">BACKEND ENGINEER</h3>
+        <div style="font-family: 'Space Mono', monospace; font-size: 12px; color: #6E6B65; padding-top: 10px;">Company Name</div>
+        <p style="margin: 0; padding-top: 16px; font-size: 15.5px; line-height: 1.55; color: #35322D; max-width: 46ch; text-wrap: pretty;">Building and maintaining backend systems, APIs, infrastructure, and data-driven applications.</p>
+      </div>
+      <div style="flex: 1.7 1 min(100%, 260px); padding-top: 5px;">
+        <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: 14px;">SELECTED IMPACT</div>
+        <div style="display: grid; gap: 11px; font-size: 14.5px; line-height: 1.45; color: #35322D;">
+          <div style="display: grid; grid-template-columns: 14px 1fr; gap: 8px;"><span style="color: oklch(0.46 0.19 258);">•</span><span>Built scalable backend services</span></div>
+          <div style="display: grid; grid-template-columns: 14px 1fr; gap: 8px;"><span style="color: oklch(0.46 0.19 258);">•</span><span>Worked with databases and caching systems</span></div>
+          <div style="display: grid; grid-template-columns: 14px 1fr; gap: 8px;"><span style="color: oklch(0.46 0.19 258);">•</span><span>Designed APIs and system integrations</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; padding: 20px 0; border-top: 1px solid rgba(17,17,17,0.14); border-bottom: 1px solid rgba(17,17,17,0.14); font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.14em; color: #6E6B65;">
+      <span>FULL HISTORY</span>
+      <a href="#experience">→ EXPERIENCE</a>
+    </div>
+  </section>
+
+  <section id="about" style="padding: clamp(56px, 10vh, 118px) 0 0; display: flex; flex-wrap: wrap; gap: clamp(26px, 5vw, 80px); align-items: flex-start;">
+    <div style="flex: 3 1 min(100%, 400px);">
+      <div style="font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: clamp(20px, 3.4vh, 40px);">03 / ABOUT</div>
+      <p style="margin: 0; font-size: clamp(24px, 3.5vw, 54px); font-weight: 500; letter-spacing: -0.032em; line-height: 1.1; max-width: 24ch; text-wrap: pretty;">I'm a software engineer interested in understanding what happens underneath the abstraction.</p>
+      <div style="display: flex; gap: 12px; padding-top: clamp(24px, 4vh, 44px); max-width: 34ch; border-top: 1px solid rgba(17,17,17,0.14); margin-top: clamp(24px, 4vh, 44px);">
+        <span style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: oklch(0.46 0.19 258); padding-top: 3px;">P.S.</span>
+        <p style="margin: 0; font-family: Archivo, sans-serif; font-style: italic; font-size: 15px; line-height: 1.55; color: #6E6B65; text-wrap: pretty;">Most of this gets built late at night, with filter coffee and a Counter-Strike round between deploys.</p>
+      </div>
+    </div>
+    <div style="flex: 2 1 min(100%, 300px); padding-top: clamp(0px, 6vh, 74px);">
+      <p style="margin: 0; font-size: 16px; line-height: 1.68; color: #35322D; max-width: 44ch; text-wrap: pretty;">My work sits close to the parts of a product most people never see: the services, queues, and data stores that decide whether it stays reliable under load. I spend my time on backend engineering and distributed systems, and increasingly on the cloud infrastructure they run on.</p>
+      <p style="margin: 0; padding-top: 18px; font-size: 16px; line-height: 1.68; color: #35322D; max-width: 44ch; text-wrap: pretty;">Lately that has extended to applied AI: using models as components inside real systems rather than as demos, with the same attention to failure modes, cost, and latency.</p>
+      <a href="#about" style="display: inline-block; padding-top: 22px; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.14em;">→ MORE ABOUT ME</a>
+    </div>
+  </section>
+
+  <section style="padding: clamp(56px, 10vh, 112px) 0 0;">
+    <div style="font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: clamp(20px, 3.4vh, 38px);">CURRENTLY</div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)); gap: 1px; background: rgba(17,17,17,0.14); border-top: 1px solid rgba(17,17,17,0.14); border-bottom: 1px solid rgba(17,17,17,0.14);">
+      <div style="background: #F5F4F0; padding: 24px clamp(16px, 2vw, 28px) 28px 0;">
+        <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: oklch(0.46 0.19 258); padding-bottom: 12px;">BUILDING</div>
+        <div style="font-size: 17px; line-height: 1.35; letter-spacing: -0.005em;">Real-time trading infrastructure</div>
+      </div>
+      <div style="background: #F5F4F0; padding: 24px clamp(16px, 2vw, 28px) 28px;">
+        <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: oklch(0.46 0.19 258); padding-bottom: 12px;">LEARNING</div>
+        <div style="font-size: 17px; line-height: 1.35; letter-spacing: -0.005em;">Applied AI Engineering</div>
+      </div>
+      <div style="background: #F5F4F0; padding: 24px clamp(16px, 2vw, 28px) 28px;">
+        <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: oklch(0.46 0.19 258); padding-bottom: 12px;">EXPLORING</div>
+        <div style="font-size: 17px; line-height: 1.35; letter-spacing: -0.005em;">Cloud architecture and distributed systems</div>
+      </div>
+      <div style="background: #F5F4F0; padding: 24px 0 28px clamp(16px, 2vw, 28px);">
+        <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: oklch(0.46 0.19 258); padding-bottom: 12px;">OUTSIDE WORK</div>
+        <div style="font-size: 17px; line-height: 1.35; letter-spacing: -0.005em;">Counter-Strike · Coffee · Building things</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="ask" style="padding: clamp(56px, 11vh, 126px) 0 0;">
+    <div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: clamp(22px, 3.6vh, 40px);">
+      <span>04 / ASK</span>
+      <span style="display: flex; align-items: center; gap: 8px;">KNOWLEDGE SYSTEM <span style="width: 6px; height: 6px; border-radius: 50%; background: oklch(0.46 0.19 258);"></span> ONLINE</span>
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; gap: clamp(28px, 5vw, 76px); border-top: 1px solid rgba(17,17,17,0.14); padding-top: clamp(28px, 4.5vh, 52px);">
+
+      <div style="flex: 2 1 min(100%, 300px);">
+        <h2 style="margin: 0; font-size: clamp(32px, 5.4vw, 78px); font-weight: 500; letter-spacing: -0.04em; line-height: 0.94;">ASK ME<br />ANYTHING.</h2>
+        <p style="margin: 0; padding-top: 20px; font-size: 16px; line-height: 1.6; color: #35322D; max-width: 36ch; text-wrap: pretty;">Instead of searching through my portfolio, ask my AI assistant about my experience, projects, technologies, or what I'm currently building.</p>
+
+        <div style="display: flex; gap: clamp(20px, 3vw, 40px); padding-top: clamp(28px, 4.5vh, 52px); flex-wrap: wrap;">
+          <svg viewBox="0 0 120 210" style="width: 120px; height: 200px; flex: none; overflow: hidden;">
+            <line x1="10" y1="10" x2="10" y2="200" stroke="rgba(17,17,17,0.2)" stroke-width="1" />
+            <g font-family="Space Mono, monospace" font-size="9.5" letter-spacing="1.4" fill="#6E6B65">
+              <text x="24" y="14">QUESTION</text>
+              <text x="24" y="77">CONTEXT</text>
+              <text x="24" y="140">RETRIEVAL</text>
+              <text x="24" y="203" fill="#111111">RESPONSE</text>
+            </g>
+            <g fill="#F5F4F0" stroke="#111111" stroke-width="1">
+              <circle cx="10" cy="10" r="3.5" />
+              <circle cx="10" cy="73" r="3.5" />
+              <circle cx="10" cy="136" r="3.5" />
+            </g>
+            <circle cx="10" cy="199" r="3.5" fill="oklch(0.46 0.19 258)" />
+          </svg>
+
+          <div style="flex: 1 1 200px; min-width: 190px; align-self: flex-end;">
+            <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: 12px;">KNOWLEDGE BASE</div>
+            <div style="font-family: 'Space Mono', monospace; font-size: 11.5px; letter-spacing: 0.08em;">
+              <div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-top: 1px solid rgba(17,17,17,0.12);"><span style="color: #6E6B65;">PROJECTS</span><span>03</span></div>
+              <div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-top: 1px solid rgba(17,17,17,0.12);"><span style="color: #6E6B65;">EXPERIENCE</span><span>02</span></div>
+              <div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-top: 1px solid rgba(17,17,17,0.12);"><span style="color: #6E6B65;">TECHNOLOGIES</span><span>12+</span></div>
+              <div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-top: 1px solid rgba(17,17,17,0.12); border-bottom: 1px solid rgba(17,17,17,0.12);"><span style="color: #6E6B65;">CURRENT FOCUS</span><span style="color: oklch(0.46 0.19 258);">ACTIVE</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="flex: 3 1 min(100%, 360px);">
+        <form onSubmit="{{ submit }}" style="border: 1px solid {{ inputBorder }}; transition: border-color 200ms ease; padding: clamp(20px, 2.6vw, 34px) clamp(18px, 2.2vw, 30px) 0;">
+          <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: 18px;">ASK ABOUT MY EXPERIENCE, PROJECTS, OR WHAT I'M BUILDING</div>
+          <div style="display: flex; align-items: center; gap: 12px; padding-bottom: clamp(20px, 2.6vw, 30px);">
+            <span style="font-family: 'Space Mono', monospace; font-size: 15px; color: oklch(0.46 0.19 258);">&gt;</span>
+            <input value="{{ q }}" onChange="{{ onQ }}" onFocus="{{ onFocus }}" onBlur="{{ onBlur }}" placeholder="Type a question…" style="flex: 1; min-width: 0; border: none; background: transparent; outline: none; font-size: clamp(16px, 1.5vw, 22px); letter-spacing: -0.015em; color: #111111; padding: 0;" />
+            <button type="submit" style="font-family: 'Space Mono', 'Segoe UI Symbol', 'Apple Symbols', system-ui, monospace; font-size: 13px; color: #6E6B65; background: transparent; border: none; cursor: pointer; padding: 4px; transition: color 160ms ease;" style-hover="color: oklch(0.46 0.19 258);">↵</button>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 16px; padding: 12px 0; border-top: 1px solid rgba(17,17,17,0.12); font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.16em; color: #6E6B65;">
+            <span>{{ statusLabel }}</span>
+            <span style="display: flex; align-items: center; gap: 7px;"><span style="width: 5px; height: 5px; border-radius: 50%; background: oklch(0.46 0.19 258);"></span>{{ statusState }}</span>
+          </div>
+        </form>
+
+        <sc-if value="{{ idle }}" hint-placeholder-val="{{ true }}">
+          <div style="padding-top: clamp(24px, 3.6vh, 38px);">
+            <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: 6px;">SUGGESTED QUERIES</div>
+            <button onClick="{{ pick0 }}" style="display: flex; gap: 14px; width: 100%; text-align: left; background: transparent; border: none; border-top: 1px solid rgba(17,17,17,0.12); cursor: pointer; padding: 15px 6px; font-family: 'Space Mono', monospace; font-size: 12.5px; letter-spacing: 0.03em; color: #35322D; transition: color 160ms ease, background 200ms ease, padding-left 200ms ease;" style-hover="color: oklch(0.46 0.19 258); background: rgba(27,59,217,0.035); padding-left: 12px;"><span style="color: #6E6B65;">01</span><span>What technologies does Anish work with?</span></button>
+            <button onClick="{{ pick1 }}" style="display: flex; gap: 14px; width: 100%; text-align: left; background: transparent; border: none; border-top: 1px solid rgba(17,17,17,0.12); cursor: pointer; padding: 15px 6px; font-family: 'Space Mono', monospace; font-size: 12.5px; letter-spacing: 0.03em; color: #35322D; transition: color 160ms ease, background 200ms ease, padding-left 200ms ease;" style-hover="color: oklch(0.46 0.19 258); background: rgba(27,59,217,0.035); padding-left: 12px;"><span style="color: #6E6B65;">02</span><span>Tell me about his backend experience.</span></button>
+            <button onClick="{{ pick2 }}" style="display: flex; gap: 14px; width: 100%; text-align: left; background: transparent; border: none; border-top: 1px solid rgba(17,17,17,0.12); cursor: pointer; padding: 15px 6px; font-family: 'Space Mono', monospace; font-size: 12.5px; letter-spacing: 0.03em; color: #35322D; transition: color 160ms ease, background 200ms ease, padding-left 200ms ease;" style-hover="color: oklch(0.46 0.19 258); background: rgba(27,59,217,0.035); padding-left: 12px;"><span style="color: #6E6B65;">03</span><span>What is he currently building?</span></button>
+            <button onClick="{{ pick3 }}" style="display: flex; gap: 14px; width: 100%; text-align: left; background: transparent; border: none; border-top: 1px solid rgba(17,17,17,0.12); cursor: pointer; padding: 15px 6px; font-family: 'Space Mono', monospace; font-size: 12.5px; letter-spacing: 0.03em; color: #35322D; transition: color 160ms ease, background 200ms ease, padding-left 200ms ease;" style-hover="color: oklch(0.46 0.19 258); background: rgba(27,59,217,0.035); padding-left: 12px;"><span style="color: #6E6B65;">04</span><span>Show me his most interesting project.</span></button>
+            <button onClick="{{ pick4 }}" style="display: flex; gap: 14px; width: 100%; text-align: left; background: transparent; border: none; border-top: 1px solid rgba(17,17,17,0.12); border-bottom: 1px solid rgba(17,17,17,0.12); cursor: pointer; padding: 15px 6px; font-family: 'Space Mono', monospace; font-size: 12.5px; letter-spacing: 0.03em; color: #35322D; transition: color 160ms ease, background 200ms ease, padding-left 200ms ease;" style-hover="color: oklch(0.46 0.19 258); background: rgba(27,59,217,0.035); padding-left: 12px;"><span style="color: #6E6B65;">05</span><span>What is he learning right now?</span></button>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ hasConv }}" hint-placeholder-val="{{ false }}">
+          <div style="padding-top: clamp(24px, 3.6vh, 38px); opacity: {{ convO }}; transform: translateY({{ convY }}); transition: opacity 320ms ease, transform 320ms cubic-bezier(0.2,0.7,0.2,1);">
+            <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: 12px;">QUERY</div>
+            <p style="margin: 0; font-size: clamp(17px, 1.7vw, 24px); font-weight: 500; letter-spacing: -0.02em; line-height: 1.32; color: #111111; max-width: 34ch; text-wrap: pretty;">{{ queryText }}</p>
+
+            <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: #6E6B65; padding: clamp(22px, 3vh, 32px) 0 12px; border-top: 1px solid rgba(17,17,17,0.12); margin-top: clamp(22px, 3vh, 32px);">{{ responseLabel }}</div>
+            <p style="margin: 0; font-size: 16.5px; line-height: 1.72; color: #35322D; max-width: 52ch; text-wrap: pretty; min-height: 3.4em;">{{ answerText }}<span style="display: inline-block; width: 7px; height: 0.95em; margin-left: 3px; vertical-align: -0.1em; background: oklch(0.46 0.19 258); animation: caret 1s steps(1) infinite; opacity: {{ caretO }};"></span></p>
+            <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: #6E6B65; padding-top: 18px;">SOURCE — {{ answerSource }}</div>
+
+            <div style="padding-top: clamp(24px, 3.4vh, 36px);">
+              <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: 6px;">RELATED QUERIES</div>
+              <button onClick="{{ rel0 }}" style="display: block; width: 100%; text-align: left; background: transparent; border: none; border-top: 1px solid rgba(17,17,17,0.12); cursor: pointer; padding: 14px 6px; font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 0.03em; color: #35322D; transition: color 160ms ease, padding-left 200ms ease;" style-hover="color: oklch(0.46 0.19 258); padding-left: 12px;">→ {{ rel0Label }}</button>
+              <button onClick="{{ rel1 }}" style="display: block; width: 100%; text-align: left; background: transparent; border: none; border-top: 1px solid rgba(17,17,17,0.12); cursor: pointer; padding: 14px 6px; font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 0.03em; color: #35322D; transition: color 160ms ease, padding-left 200ms ease;" style-hover="color: oklch(0.46 0.19 258); padding-left: 12px;">→ {{ rel1Label }}</button>
+              <a href="{{ relHref }}" style="display: block; border-top: 1px solid rgba(17,17,17,0.12); border-bottom: 1px solid rgba(17,17,17,0.12); padding: 14px 6px; font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 0.03em; color: #35322D; transition: color 160ms ease, padding-left 200ms ease;" style-hover="color: oklch(0.46 0.19 258); padding-left: 12px;">→ {{ relHrefLabel }}</a>
+              <button onClick="{{ reset }}" style="background: transparent; border: none; cursor: pointer; padding: 16px 6px 0; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.16em; color: #6E6B65;" style-hover="color: #111111;">← NEW QUERY</button>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" style="padding: clamp(64px, 12vh, 140px) 0 0;">
+    <div style="display: flex; flex-wrap: wrap; gap: clamp(26px, 5vw, 76px); align-items: flex-start;">
+      <h2 style="flex: 3 1 min(100%, 420px); margin: 0; font-size: clamp(32px, 6.2vw, 96px); font-weight: 600; letter-spacing: -0.045em; line-height: 0.9;">LET'S BUILD<br />SOMETHING<br />INTERESTING.</h2>
+      <div style="flex: 2 1 min(100%, 280px);">
+        <p style="margin: 0; font-size: 16px; line-height: 1.6; color: #35322D; max-width: 32ch; text-wrap: pretty;">Open to interesting engineering opportunities, collaborations, and conversations.</p>
+        <div style="display: grid; gap: 1px; background: rgba(17,17,17,0.14); margin-top: 28px; border-top: 1px solid rgba(17,17,17,0.14);">
+          <a href="mailto:hello@anishshejawale.com" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 16px; background: #F5F4F0; padding: 15px 0; font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 0.09em; color: #111111;" style-hover="color: oklch(0.46 0.19 258);"><span>EMAIL</span><span style="color: #6E6B65;">hello@anishshejawale.com</span></a>
+          <a href="#contact" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 16px; background: #F5F4F0; padding: 15px 0; font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 0.09em; color: #111111;" style-hover="color: oklch(0.46 0.19 258);"><span>LINKEDIN</span><span style="color: #6E6B65;">/in/anishshejawale</span></a>
+          <a href="#contact" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 16px; background: #F5F4F0; padding: 15px 0; font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 0.09em; color: #111111;" style-hover="color: oklch(0.46 0.19 258);"><span>GITHUB</span><span style="color: #6E6B65;">@anishshejawale</span></a>
+        </div>
+
+        <div style="padding-top: clamp(30px, 4.5vh, 48px);">
+          <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: clamp(18px, 2.6vh, 26px);">OR SEND A MESSAGE</div>
+
+          <sc-if value="{{ formIdle }}" hint-placeholder-val="{{ true }}">
+            <form onSubmit="{{ sendMessage }}">
+              <div style="padding-bottom: 22px;">
+                <label for="cf-name" style="display: block; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: 8px;">NAME</label>
+                <input id="cf-name" value="{{ fName }}" onChange="{{ onName }}" onFocus="{{ focusName }}" onBlur="{{ blurField }}" placeholder="Your name" style="width: 100%; border: none; border-bottom: 1px solid {{ nameBorder }}; background: transparent; outline: none; font-size: 17px; letter-spacing: -0.01em; color: #111111; padding: 0 0 10px; transition: border-color 180ms ease;" />
+                <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: oklch(0.46 0.19 258); height: 16px; padding-top: 6px;">{{ nameError }}</div>
+              </div>
+
+              <div style="padding-bottom: 22px;">
+                <label for="cf-email" style="display: block; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: 8px;">EMAIL</label>
+                <input id="cf-email" value="{{ fEmail }}" onChange="{{ onEmail }}" onFocus="{{ focusEmail }}" onBlur="{{ blurField }}" placeholder="your@email.com" style="width: 100%; border: none; border-bottom: 1px solid {{ emailBorder }}; background: transparent; outline: none; font-size: 17px; letter-spacing: -0.01em; color: #111111; padding: 0 0 10px; transition: border-color 180ms ease;" />
+                <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: oklch(0.46 0.19 258); height: 16px; padding-top: 6px;">{{ emailError }}</div>
+              </div>
+
+              <div style="padding-bottom: 20px;">
+                <label for="cf-msg" style="display: block; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: 8px;">MESSAGE</label>
+                <textarea id="cf-msg" rows="3" value="{{ fMsg }}" onChange="{{ onMsg }}" onFocus="{{ focusMsg }}" onBlur="{{ blurField }}" placeholder="Tell me a little about what you're working on." style="width: 100%; resize: vertical; border: none; border-bottom: 1px solid {{ msgBorder }}; background: transparent; outline: none; font-family: Archivo, sans-serif; font-size: 17px; line-height: 1.5; letter-spacing: -0.01em; color: #111111; padding: 0 0 10px; transition: border-color 180ms ease;"></textarea>
+                <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: oklch(0.46 0.19 258); height: 16px; padding-top: 6px;">{{ msgError }}</div>
+              </div>
+
+              <div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px 20px; border-top: 1px solid rgba(17,17,17,0.14); padding-top: 18px;">
+                <span style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.16em; color: #6E6B65;">{{ formStatus }}</span>
+                <button type="submit" style="font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 0.16em; color: #111111; background: transparent; border: none; cursor: pointer; padding: 4px 0; transition: color 160ms ease, transform 220ms cubic-bezier(0.2,0.7,0.2,1);" style-hover="color: oklch(0.46 0.19 258); transform: translateX(4px);">SEND MESSAGE →</button>
+              </div>
+            </form>
+          </sc-if>
+
+          <sc-if value="{{ formSent }}" hint-placeholder-val="{{ false }}">
+            <div style="border-top: 1px solid rgba(17,17,17,0.14); border-bottom: 1px solid rgba(17,17,17,0.14); padding: 26px 0;">
+              <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: 12px;">MESSAGE SENT</div>
+              <p style="margin: 0; font-size: 18px; line-height: 1.5; letter-spacing: -0.015em; color: #111111;">Thank you — I'll get back to you soon.</p>
+              <div style="display: flex; align-items: center; gap: 8px; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.18em; color: #6E6B65; padding-top: 18px;"><span style="width: 5px; height: 5px; border-radius: 50%; background: oklch(0.46 0.19 258);"></span>TRANSMITTED SUCCESSFULLY</div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ formFailed }}" hint-placeholder-val="{{ false }}">
+            <div style="border-top: 1px solid rgba(17,17,17,0.14); border-bottom: 1px solid rgba(17,17,17,0.14); padding: 26px 0;">
+              <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: 12px;">UNABLE TO SEND</div>
+              <p style="margin: 0; font-size: 18px; line-height: 1.5; letter-spacing: -0.015em; color: #111111;">Something went wrong. Please try again.</p>
+              <button onClick="{{ retry }}" style="font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.16em; color: oklch(0.46 0.19 258); background: transparent; border: none; cursor: pointer; padding: 18px 0 0;" style-hover="color: #111111;">RETRY →</button>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; margin-top: clamp(52px, 10vh, 110px); padding: 20px 0 30px; border-top: 1px solid rgba(17,17,17,0.14); font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.14em; color: #6E6B65;">
+    <span>ANISH SHEJAWALE — 2026</span>
+    <span style="color: #111111;">Built with curiosity.</span>
+  </footer>
+
+  <sc-if value="{{ paletteOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closePalette }}" style="position: fixed; inset: 0; background: rgba(17,17,17,0.42); display: flex; align-items: flex-start; justify-content: center; padding: clamp(48px, 13vh, 160px) 16px; z-index: 50;">
+      <div onClick="{{ stop }}" style="width: min(660px, 100%); background: #F5F4F0; color: #111111; border: 1px solid rgba(17,17,17,0.45); box-shadow: 0 28px 70px rgba(17,17,17,0.22);">
+        <form onSubmit="{{ submit }}" style="display: flex; align-items: center; gap: 12px; padding: 18px 22px; border-bottom: 1px solid rgba(17,17,17,0.14);">
+          <span style="font-family: 'Space Mono', monospace; font-size: 14px; color: oklch(0.46 0.19 258);">&gt;</span>
+          <input value="{{ q }}" onChange="{{ onQ }}" placeholder="Ask about experience, projects, technologies…" style="flex: 1; min-width: 0; border: none; background: transparent; outline: none; font-size: 17px; letter-spacing: -0.012em; color: #111111;" />
+          <span style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: #6E6B65;">ESC</span>
+        </form>
+        <div style="overflow: hidden; height: {{ paletteAnswerH }}; opacity: {{ answerO }}; transition: height 400ms cubic-bezier(0.2,0.7,0.2,1), opacity 300ms ease; border-bottom: 1px solid rgba(17,17,17,0.14);">
+          <div style="padding: 18px 22px 20px;">
+            <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: 8px;">QUERY</div>
+            <p style="margin: 0 0 16px; font-size: 15px; font-weight: 500; letter-spacing: -0.012em; color: #111111;">{{ queryText }}</p>
+            <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: #6E6B65; padding-bottom: 10px; border-top: 1px solid rgba(17,17,17,0.12); padding-top: 16px;">{{ answerLabel }}</div>
+            <p style="margin: 0; font-size: 15px; line-height: 1.68; color: #35322D;">{{ answerText }}</p>
+          </div>
+        </div>
+        <div style="padding: 12px 0;">
+          <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: #6E6B65; padding: 8px 22px 10px;">SUGGESTED QUERIES</div>
+          <button onClick="{{ pick0 }}" style="display: flex; gap: 12px; width: 100%; text-align: left; background: transparent; border: none; cursor: pointer; padding: 11px 22px; font-family: 'Space Mono', monospace; font-size: 12.5px; color: #35322D;" style-hover="background: rgba(27,59,217,0.05); color: oklch(0.46 0.19 258);"><span style="color: #6E6B65;">01</span><span>What technologies does Anish work with?</span></button>
+          <button onClick="{{ pick1 }}" style="display: flex; gap: 12px; width: 100%; text-align: left; background: transparent; border: none; cursor: pointer; padding: 11px 22px; font-family: 'Space Mono', monospace; font-size: 12.5px; color: #35322D;" style-hover="background: rgba(27,59,217,0.05); color: oklch(0.46 0.19 258);"><span style="color: #6E6B65;">02</span><span>Tell me about his backend experience.</span></button>
+          <button onClick="{{ pick2 }}" style="display: flex; gap: 12px; width: 100%; text-align: left; background: transparent; border: none; cursor: pointer; padding: 11px 22px; font-family: 'Space Mono', monospace; font-size: 12.5px; color: #35322D;" style-hover="background: rgba(27,59,217,0.05); color: oklch(0.46 0.19 258);"><span style="color: #6E6B65;">03</span><span>What is he currently building?</span></button>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding: 12px 22px; border-top: 1px solid rgba(17,17,17,0.14); font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: #6E6B65;">
+          <span style="display: flex; align-items: center; gap: 7px;"><span style="width: 5px; height: 5px; border-radius: 50%; background: oklch(0.46 0.19 258);"></span>{{ statusState }}</span><span><span style="font-family: 'Space Mono', 'Segoe UI Symbol', 'Apple Symbols', system-ui, sans-serif;">↵</span> TO ASK</span>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440}}">
+const ANSWERS = [
+  {
+    q: "What technologies does Anish work with?",
+    a: "TypeScript and Go for services, PostgreSQL and Redis for state, Kafka for events. Infrastructure runs on AWS, containerised with Docker. Most of the choices come down to what fails predictably under load.",
+    src: "01 / SELECTED WORK · 02 / EXPERIENCE",
+    related: [1, 2],
+    href: "#work",
+    hrefLabel: "View the projects these are used in"
+  },
+  {
+    q: "Tell me about his backend experience.",
+    a: "Backend engineer since 2025, building and maintaining APIs, services and data pipelines. The work spans scalable backend services, database and caching design, and system integrations across teams.",
+    src: "02 / EXPERIENCE",
+    related: [0, 3],
+    href: "#experience",
+    hrefLabel: "View full experience"
+  },
+  {
+    q: "What is he currently building?",
+    a: "Real-time trading infrastructure: a write path that takes a broker feed through an API with idempotent writes, a replayable queue, a short-TTL cache and workers landing events in a timeseries store at roughly 40ms p95.",
+    src: "FIG. 01 · CURRENTLY",
+    related: [3, 4],
+    href: "#top",
+    hrefLabel: "See the system diagram"
+  },
+  {
+    q: "Show me his most interesting project.",
+    a: "Trade Journal Platform. Real-time trading infrastructure that synchronises trades, processes events and generates analytics, built around a single-writer ledger so history stays reconstructable.",
+    src: "01 / SELECTED WORK",
+    related: [0, 2],
+    href: "#work",
+    hrefLabel: "Open the case study"
+  },
+  {
+    q: "What is he learning right now?",
+    a: "Applied AI engineering, mostly treating models as components inside real systems: retrieval, evaluation, cost and latency budgets. Alongside that, cloud architecture and distributed systems.",
+    src: "CURRENTLY",
+    related: [2, 1],
+    href: "#contact",
+    hrefLabel: "Get in touch"
+  }
+];
+
+class Component extends DCLogic {
+  state = {
+    hover: null, q: "", paletteOpen: false, typed: "", answer: null, thinking: false, focused: false, query: "",
+    name: "", email: "", msg: "", errors: {}, field: null, formState: "idle"
+  };
+
+  validate() {
+    const e = {};
+    if (!this.state.name.trim()) e.name = "REQUIRED";
+    if (!this.state.email.trim()) e.email = "REQUIRED";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(this.state.email.trim())) e.email = "ENTER A VALID EMAIL";
+    if (!this.state.msg.trim()) e.msg = "REQUIRED";
+    return e;
+  }
+
+  componentDidMount() {
+    this._key = (e) => {
+      if (e.key === "Escape") this.setState({ paletteOpen: false });
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        this.setState({ paletteOpen: true });
+      }
+    };
+    window.addEventListener("keydown", this._key);
+  }
+  componentWillUnmount() {
+    window.removeEventListener("keydown", this._key);
+    clearInterval(this._t); clearTimeout(this._d); clearTimeout(this._s);
+  }
+
+  ask(question) {
+    clearInterval(this._t); clearTimeout(this._d);
+    const match = ANSWERS.find((x) => x.q.toLowerCase() === question.trim().toLowerCase());
+    const answer = match || {
+      a: "I can speak to Anish's projects, stack, experience and what he's building right now. Try one of the suggested queries.",
+      src: "GENERAL",
+      related: [0, 2],
+      href: "#work",
+      hrefLabel: "Browse selected work"
+    };
+    this.setState({ q: "", query: question, answer, typed: "", thinking: true });
+    this._d = setTimeout(() => {
+      this.setState({ thinking: false });
+      let i = 0;
+      this._t = setInterval(() => {
+        i += 2;
+        if (i >= answer.a.length) { clearInterval(this._t); i = answer.a.length; }
+        this.setState({ typed: answer.a.slice(0, i) });
+      }, 16);
+    }, 420);
+  }
+
+  renderVals() {
+    const h = this.state.hover;
+    const st = this.state;
+    const open = !!st.answer;
+    const pick = (i) => () => this.ask(ANSWERS[i].q);
+    return {
+      q: st.q,
+      paletteOpen: st.paletteOpen,
+      onQ: (e) => this.setState({ q: e.target.value }),
+      submit: (e) => { e.preventDefault(); if (st.q.trim()) this.ask(st.q); },
+      openPalette: (e) => { e.preventDefault(); this.setState({ paletteOpen: true }); },
+      closePalette: () => this.setState({ paletteOpen: false }),
+      stop: (e) => e.stopPropagation(),
+      idle: !open,
+      hasConv: open,
+      convO: open ? 1 : 0,
+      convY: open ? "0px" : "8px",
+      queryText: st.query,
+      responseLabel: st.thinking ? "RETRIEVING CONTEXT…" : "RESPONSE",
+      onFocus: () => this.setState({ focused: true }),
+      onBlur: () => this.setState({ focused: false }),
+      inputBorder: st.focused ? "oklch(0.46 0.19 258)" : "rgba(17,17,17,0.2)",
+      statusLabel: open ? "ASSISTANT" : "ASSISTANT STATUS",
+      statusState: st.thinking ? "RETRIEVING" : "READY",
+      paletteAnswerH: open ? "auto" : "0px",
+      answerO: open ? 1 : 0,
+      answerLabel: st.thinking ? "RETRIEVING CONTEXT…" : "RESPONSE",
+      answerText: st.typed,
+      answerSource: st.answer ? st.answer.src : "—",
+      caretO: st.answer && st.typed.length < st.answer.a.length ? 1 : 0,
+      reset: () => { clearInterval(this._t); clearTimeout(this._d); this.setState({ answer: null, typed: "", query: "", q: "", thinking: false }); },
+      rel0Label: st.answer && st.answer.related ? ANSWERS[st.answer.related[0]].q : "",
+      rel1Label: st.answer && st.answer.related ? ANSWERS[st.answer.related[1]].q : "",
+      rel0: () => { if (st.answer) this.ask(ANSWERS[st.answer.related[0]].q); },
+      rel1: () => { if (st.answer) this.ask(ANSWERS[st.answer.related[1]].q); },
+      relHref: st.answer ? st.answer.href : "#work",
+      relHrefLabel: st.answer ? st.answer.hrefLabel : "",
+      enter0: () => this.setState({ hover: 0 }),
+      enter1: () => this.setState({ hover: 1 }),
+      enter2: () => this.setState({ hover: 2 }),
+      leave: () => this.setState({ hover: null }),
+      shift0: h === 0 ? "10px" : "0px",
+      shift1: h === 1 ? "10px" : "0px",
+      h0: h === 0 ? "78px" : "0px",
+      h1: h === 1 ? "78px" : "0px",
+      o0: h === 0 ? 1 : 0,
+      o1: h === 1 ? 1 : 0,
+      bg0: h === 0 ? "rgba(27,59,217,0.035)" : "rgba(27,59,217,0)",
+      bg1: h === 1 ? "rgba(27,59,217,0.035)" : "rgba(27,59,217,0)",
+      maxH2: h === 2 ? "420px" : "150px",
+      pick0: pick(0), pick1: pick(1), pick2: pick(2), pick3: pick(3), pick4: pick(4),
+
+      fName: st.name, fEmail: st.email, fMsg: st.msg,
+      onName: (e) => this.setState({ name: e.target.value }),
+      onEmail: (e) => this.setState({ email: e.target.value }),
+      onMsg: (e) => this.setState({ msg: e.target.value }),
+      focusName: () => this.setState({ field: "name" }),
+      focusEmail: () => this.setState({ field: "email" }),
+      focusMsg: () => this.setState({ field: "msg" }),
+      blurField: () => this.setState({ field: null }),
+      nameBorder: st.field === "name" ? "oklch(0.46 0.19 258)" : "rgba(17,17,17,0.2)",
+      emailBorder: st.field === "email" ? "oklch(0.46 0.19 258)" : "rgba(17,17,17,0.2)",
+      msgBorder: st.field === "msg" ? "oklch(0.46 0.19 258)" : "rgba(17,17,17,0.2)",
+      nameError: st.errors.name || "",
+      emailError: st.errors.email || "",
+      msgError: st.errors.msg || "",
+      formIdle: st.formState === "idle" || st.formState === "sending",
+      formSent: st.formState === "sent",
+      formFailed: st.formState === "failed",
+      formStatus: st.formState === "sending" ? "SENDING…" : "● READY",
+      retry: () => this.setState({ formState: "idle" }),
+      sendMessage: (e) => {
+        e.preventDefault();
+        const errors = this.validate();
+        this.setState({ errors });
+        if (Object.keys(errors).length) return;
+        this.setState({ formState: "sending" });
+        this._s = setTimeout(() => this.setState({ formState: "sent", name: "", email: "", msg: "" }), 900);
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>
