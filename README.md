@@ -19,45 +19,70 @@ pnpm lint
 prose. Add a project by pushing to the `projects` array; add a role by pushing to
 `experience`. Nothing else needs touching.
 
-## Design concept — "Instrumented"
+## Design — "Editorial"
 
-The site presents itself as a production system its author runs. Every visual
-element is a demonstration of the work rather than decoration around it:
+The whole site is built from the handoff bundle in `editorial-design-system-new/`
+(exported from claude.ai/design). **Those HTML files are the source of truth for
+every measurement**: change a value there first, then mirror it here.
 
-- **Hero** — an ambient equity-curve canvas (`TickChart`), the visual language of
-  the product being described. Deliberately abstract: a seeded random walk with no
-  axes or numbers, so it never reads as a claim about data.
-- **Spec card** — the hero's right column: a manifest of facts in mono, not a
-  paragraph of self-description. A stat panel lived here first and was cut; bare
-  numbers read as noise without the context the case study gives them.
-- **Architecture diagram** — hand-authored SVG of the real PropVexis data path,
-  with animated flow along each edge. This is the centrepiece; it's what makes an
-  interviewer stop and read.
-- **Pipeline** — the actual GitHub Actions stages behind app.propvexis.com.
-- **Stack** — bento grid, varied spans on a 6-column grid.
+- `project/Anish Shejawale - Homepage.dc.html` → `/`
+- `project/PropVexis - Case Study.dc.html` → the case-study template, used by
+  `/propvexis` and `/luxora`
 
-Rules:
+Styles live in `src/app/editorial.css` and the markup in
+`src/components/editorial/`. Tokens are declared on `:root`; every page-level
+rule is scoped under `.editorial`.
 
-- Dark only. Near-black flat surfaces, hairline `1px` borders, an engineering grid
-  masked to a vignette, and 2.5% film grain. **No gradients, no glassmorphism, no
-  glowing blobs** — those read as a crypto landing page, not an engineer.
-- One accent: `--color-brand` `#3B82F6`, the same blue as the PropVexis product,
-  so the two surfaces read as one brand. Never used for large fills.
-- Inter for prose. JetBrains Mono for numbers, labels, technical headings and
-  every diagram annotation.
-- Motion: 12px/420ms rise on scroll-in, `cubic-bezier(0.16, 1, 0.3, 1)`. All of it
-  — reveals, canvas, flow dashes, blink — off under `prefers-reduced-motion`. The
-  canvas also pauses when offscreen or the tab is hidden.
-- Icons are inline SVG. Never emoji.
-- No animation library and no UI library. Everything prerenders except the
-  contact relay.
-- **Homepage cards stay shallow** — name, description, diagram, stack, links. The
-  problem statement, features and trade-offs belong on the case study. A card that
-  says everything gives the reader no reason to click.
+- Light, printed feel: `#F5F4F0` paper over a 5px radial dot screen, `#111111`
+  ink, `#35322D` for body copy, `#6E6B65` for labels, hairline rules at
+  `rgba(17,17,17,0.14)` for structure, `0.12` for inner divisions, `0.1` for
+  soft. One accent, `oklch(0.46 0.19 258)`.
+- Archivo for display and prose, Space Mono for every label, figure annotation
+  and number. Labels are stored pre-uppercased in `content.ts` — Space Mono at
+  wide tracking kerns differently from `text-transform`.
+- No breakpoints anywhere. Both templates are `flex-wrap` plus `clamp()`, so
+  they reflow continuously rather than snapping.
+- Border radius is 2px, and only on the ⌘ ASK button. Nothing else is rounded.
+- Recurring idioms, so a new section reuses rather than invents: the numbered
+  section eyebrow (label left, counter right), the `FIG. NN —` caption pair, the
+  hairline two-column row (mono label at `flex 1 1 min(100%, 150px)`), the meta
+  row, the 1px-gap cell grid over a rule-coloured ground, and the hairline
+  key/value table.
+- Prose measure: 52ch on the homepage, 62ch on the case studies.
+
+Homepage specifics:
+
+- **FIG. 01** is the real PropVexis write path on a fixed 1200×150 grid.
+- Hover on the work index — the tint, the 10px shift, the detail strip dropping
+  open — is pure CSS, so the section stays a server component.
+
+Case-study specifics:
+
+- A reduced header: a back link and a chapter marker instead of the wordmark and
+  full nav, but the same ⌘ ASK button, so the palette works there too.
+- One `CaseStudy` component renders both routes. Every section after the problem
+  is optional and renders only when the project has content for it, so `/luxora`
+  is the same template with the diagram, trade-offs, pipeline, runtime table and
+  next-steps blocks absent — not a second layout.
+- **FIG. 01** keeps the numbered figure treatment; the pipeline is deliberately
+  quieter — an inline run of stages joined by accent hairlines, no figure number.
+- `/luxora` was never mocked. It is derived from the PropVexis template, which is
+  how the design brief framed it.
+
+The **ASK** panel and the ⌘K palette share one `AskProvider`. Each question is a
+fresh single-turn call to `/api/chat`, matching the design's one-question-at-a-
+time layout. The palette takes its suggestions and placeholder per page: the
+case studies ask about the project in front of you, the homepage asks about
+Anish.
+
+Two things in the code are not in the mocks, both deliberate: a visible
+`:focus-visible` ring in the accent (the mocks leave focus to the browser, and
+keyboard users need one), and the assistant provenance note under the ASK panel
+(questions are logged and sent to a third party, so the page has to say so).
 
 ## Contact form
 
-`ContactForm` posts JSON to `/api/contact`, which validates and relays via
+`src/components/editorial/ContactForm.tsx` posts JSON to `/api/contact`, which validates and relays via
 Resend's REST API — no SDK dependency. It has a honeypot field, length caps, and
 distinct messages for each failure. Without `RESEND_API_KEY` set it returns a 503
 and the form tells visitors to email directly, so the page degrades instead of
@@ -78,9 +103,9 @@ verifying a domain; switch `CONTACT_FROM` once `anishdevlops.xyz` is verified.
 
 | Route | What it is |
 | --- | --- |
-| `/` | The one-pager: hero, projects, experience, stack, contact |
-| `/propvexis` | Long-form case study — architecture, decisions and trade-offs |
-| `/luxora` | Shorter case study — why it exists and what's in it |
+| `/` | The one-pager: hero, FIG. 01, work, experience, stack, about, ask, contact |
+| `/propvexis` | Long-form case study — problem, data path, features, trade-offs, pipeline, infrastructure, next |
+| `/luxora` | The same template, reduced to the sections it has content for |
 | `/api/contact` | Contact form relay (the only dynamic route) |
 | `/opengraph-image` | 1200×630 social card, generated at build time |
 | `/icon.svg` | Favicon, derived from the `anish.` wordmark |

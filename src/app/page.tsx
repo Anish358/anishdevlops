@@ -1,68 +1,41 @@
-import { Architecture } from "@/components/Architecture";
-import { Assistant } from "@/components/Assistant";
-import { Contact } from "@/components/Contact";
-import { Experience } from "@/components/Experience";
-import { Hero } from "@/components/Hero";
-import { Nav } from "@/components/Nav";
-import { ProjectBlock } from "@/components/ProjectBlock";
-import { Reveal } from "@/components/Reveal";
-import { Section } from "@/components/primitives";
-import { Skills } from "@/components/Skills";
-import { assistant, projects } from "@/lib/content";
+import { About } from "@/components/editorial/About";
+import { Ask } from "@/components/editorial/Ask";
+import { AskProvider } from "@/components/editorial/AskProvider";
+import { CommandPalette } from "@/components/editorial/CommandPalette";
+import { Contact } from "@/components/editorial/Contact";
+import { Currently } from "@/components/editorial/Currently";
+import { Experience } from "@/components/editorial/Experience";
+import { Figure } from "@/components/editorial/Figure";
+import { Footer } from "@/components/editorial/Footer";
+import { Header } from "@/components/editorial/Header";
+import { Hero } from "@/components/editorial/Hero";
+import { Stack } from "@/components/editorial/Stack";
+import { Work } from "@/components/editorial/Work";
 
+/**
+ * The editorial homepage. Layout and every measurement come from
+ * editorial-design-system/project/"Anish Shejawale - Homepage.dc.html";
+ * the styles live in src/app/editorial.css, scoped to `.editorial`.
+ */
 export default function Home() {
-  const [propvexis, ...rest] = projects;
-
   return (
-    <>
-      <Nav />
-      <main id="main">
-        <Hero />
-
-        <Section id="ask" index="01" label="Ask" title={assistant.title}>
-          <div className="space-y-5">
-            <p className="max-w-2xl text-fg-muted">{assistant.intro}</p>
-            <Reveal>
-              <Assistant />
-            </Reveal>
-            <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-fg-subtle">
-              <span>{assistant.disclaimer}</span>
-              <span>
-                {assistant.contactPrompt}{" "}
-                <a
-                  href="#contact"
-                  className="underline-offset-4 transition-colors hover:text-fg hover:underline"
-                >
-                  {assistant.contactLink}
-                </a>
-                .
-              </span>
-            </p>
-          </div>
-        </Section>
-
-        <Section id="work" index="02" label="Projects">
-          <div className="space-y-6">
-            <ProjectBlock project={propvexis}>
-              <Architecture />
-            </ProjectBlock>
-
-            {rest.map((project) => (
-              <ProjectBlock key={project.slug} project={project} />
-            ))}
-          </div>
-        </Section>
-
-        <Section id="experience" index="03" label="Experience">
+    <AskProvider>
+      <div className="editorial">
+        <Header />
+        <main id="main">
+          <Hero />
+          <Figure />
+          <Work />
           <Experience />
-        </Section>
-
-        <Section id="skills" index="04" label="Stack">
-          <Skills />
-        </Section>
-
-        <Contact />
-      </main>
-    </>
+          <Stack />
+          <About />
+          <Currently />
+          <Ask />
+          <Contact />
+        </main>
+        <Footer />
+        <CommandPalette />
+      </div>
+    </AskProvider>
   );
 }

@@ -105,9 +105,19 @@ export type Project = {
   caseStudy?: string;
   oneLiner: string;
   problem: string;
-  features: { title: string; body: string }[];
+  /**
+   * `body` is the published prose. `detail` is for facts the prose leaves out
+   * — the assistant reads both, the page renders only `body`.
+   */
+  features: { title: string; body: string; detail?: string }[];
   infra?: string;
   stack: string[];
+  /** The four-or-so technologies printed under a work row. */
+  stackLine: string;
+  /** Three stages drawn as a connected run in the hover-revealed detail. */
+  flow: [string, string, string];
+  /** One line of hard numbers under that run. */
+  stat: string;
   links: { label: string; href: string }[];
 };
 
@@ -123,24 +133,30 @@ export const projects: Project[] = [
       "Traders on funded prop accounts get one shot at a strict rule set — breach the daily or maximum drawdown and the account is gone. Most of them track it in spreadsheets that tell them what happened yesterday, not that they are 0.4% away from losing the account right now.",
     features: [
       {
-        title: "Real-time ingestion, end to end",
-        body: "A MetaTrader 5 agent I wrote in MQL5 streams closed trades and account equity into an idempotent ingest API, so a retry or a replayed batch can never double-count a trade. Data lands in PostgreSQL and reaches the open browser over WebSockets within a second of the position closing.",
+        title: "Real-time ingestion end to end",
+        body: "An MQL5 agent inside MetaTrader 5 posts each closed trade to a Fastify ingest endpoint. The write is deduplicated on the broker's own ticket id, published over Redis pub/sub and pushed to any open browser session with Socket.IO. There is no polling anywhere in the path, and a trader watching an open account sees the equity curve move as positions close.",
       },
       {
         title: "A configurable rule engine",
-        body: "Every equity snapshot is evaluated against the trader's prop-firm rule set — daily and maximum drawdown, profit targets, minimum trading days — firing breach and proximity alerts before an account is lost, alongside ROI and payout tracking. Rule sets are data, so onboarding a new firm needs no code change.",
+        body: "Every prop firm writes its rules differently: daily drawdown measured from balance or from equity, maximum drawdown static or trailing, profit targets and minimum trading days. Each firm's rule set is stored as data and evaluated against the account after every trade, so the engine reports distance to breach rather than a verdict after the fact.",
+        detail:
+          "Breach and proximity alerts fire before an account is lost, alongside ROI and payout tracking.",
       },
       {
         title: "Analytics moved into the database",
-        body: "The dashboard originally aggregated in application loops. I rebuilt it as PostgreSQL CTE and GROUP BY queries with composite indexes, cached in Redis and invalidated across clustered workers over Pub/Sub. It now holds roughly 1,000 concurrent users on a single instance.",
+        body: "Equity curves, win rate, expectancy and per-session breakdowns are computed in PostgreSQL with common table expressions over composite indexes, not assembled in application memory. The API returns a shaped result rather than a page of rows, which keeps response payloads small and the numbers consistent between views.",
+        detail:
+          "The dashboard originally aggregated in application loops. After the rewrite, with results cached in Redis and invalidated across clustered workers over Pub/Sub, it holds roughly 1,000 concurrent users on a single instance.",
       },
       {
         title: "Multi-tenancy and billing",
-        body: "Google OAuth 2.0 into JWT httpOnly-cookie sessions, row-level tenant scoping on every query, plan-gated entitlements, and Razorpay subscriptions with idempotent webhooks.",
+        body: "Accounts, trades and rule sets are scoped per tenant at the row level, with subscription tiers gating account limits and history depth. Billing state and entitlement checks live behind the same API surface as the rest of the product, so a plan change takes effect on the next request rather than on the next deploy.",
+        detail:
+          "Sessions are Google OAuth 2.0 into JWT httpOnly cookies; subscriptions run on Razorpay with idempotent webhooks.",
       },
     ],
     infra:
-      "I own the infrastructure too: GitHub Actions CI/CD to AWS EC2, three isolated environments, secrets in SSM Parameter Store, Terraform, Docker, Prometheus/Grafana and Sentry, nightly S3 backups.",
+      "GitHub Actions CI/CD to AWS EC2, three isolated environments, secrets in SSM Parameter Store, Terraform, Docker, Prometheus/Grafana and Sentry, nightly S3 backups.",
     stack: [
       "Node.js",
       "Fastify",
@@ -154,6 +170,9 @@ export const projects: Project[] = [
       "Terraform",
       "GitHub Actions",
     ],
+    stackLine: "Node.js · Fastify · PostgreSQL · Redis · AWS",
+    flow: ["INGEST", "EVALUATE", "STREAM"],
+    stat: "~1k concurrent users · single instance · sub-second updates",
     links: [
       { label: "Live site", href: "https://app.propvexis.com" },
       { label: "GitHub", href: "https://github.com/Anish358/propvexis" },
@@ -183,6 +202,9 @@ export const projects: Project[] = [
       },
     ],
     stack: ["React", "TypeScript", "OAuth", "Express", "MongoDB", "Redis", "AWS", "Docker"],
+    stackLine: "React · Express · MongoDB · Redis · AWS",
+    flow: ["CATALOGUE", "CHECKOUT", "ANALYTICS"],
+    stat: "300+ products · Redis-cached reads · ~30% faster responses",
     links: [
       { label: "Live site", href: "https://luxora-mu.vercel.app/" },
       { label: "GitHub", href: "https://github.com/Anish358/luxora" },
@@ -191,37 +213,74 @@ export const projects: Project[] = [
 ];
 
 /** Long-form write-up at /propvexis. The trade-offs are the point. */
+/**
+ * Long-form write-up at /propvexis. The trade-offs are the point.
+ *
+ * `body` is the published prose; `detail` carries the reasoning the card-sized
+ * copy has to leave out, which the assistant still answers from.
+ */
 export const caseStudy = {
   decisions: [
     {
+      kicker: "DELIVERY",
       title: "Idempotent ingest, not at-most-once delivery",
-      body: "The agent runs on a trader's home PC over a connection I don't control, so retries and duplicate batches aren't edge cases — they're the normal operating condition. Deduplicating on a deterministic key at write time makes a replay a no-op, which lets the agent retry blindly and stay dumb. The alternative, tracking acknowledgement state on the client, puts correctness in the least reliable part of the system.",
+      body: "The agent retries whenever the network drops, which means the same trade can arrive several times. Deduplicating on the broker ticket id at write time makes replays harmless, at the cost of a uniqueness constraint the ingest path has to honour and a slightly heavier write.",
+      detail:
+        "The agent runs on a trader's home PC over a connection I don't control, so retries and duplicate batches aren't edge cases — they're the normal operating condition. Deduplicating at write time lets the agent retry blindly and stay dumb. The alternative, tracking acknowledgement state on the client, puts correctness in the least reliable part of the system.",
     },
     {
+      kicker: "RULES",
       title: "Rule sets as data, not code",
-      body: "Every prop firm has slightly different rules — different drawdown basis, different reset times, different minimum trading days. Storing rule sets as rows means onboarding a firm is a config change rather than a deploy, and one evaluator covers all of them. The cost is a more abstract engine and validation I have to write by hand instead of getting it from the type system.",
+      body: "Encoding each firm's rules in application logic would have been faster to write and impossible to maintain past the third firm. Storing them as data means onboarding a firm is a row rather than a release, and it means the engine has to validate configurations it has never seen.",
+      detail:
+        "Every prop firm has a different drawdown basis, reset time and minimum trading days. One evaluator covers all of them. The cost is a more abstract engine and validation I have to write by hand instead of getting it from the type system.",
     },
     {
+      kicker: "AGGREGATION",
       title: "Aggregation in PostgreSQL, not in Node",
-      body: "The dashboard originally pulled rows and reduced them in application loops. I moved it to CTEs and GROUP BY with composite indexes, so it's one round trip and the query planner does the work. What made the rewrite safe was that the existing tests asserting on the JavaScript aggregation became the oracle for the SQL version — same inputs, same numbers, or the build fails.",
+      body: "Pulling rows into the application and reducing them there is easier to read and gets slow as history grows. Keeping the work in SQL trades that readability for stable latency, and puts the burden on indexes and query plans that have to be maintained deliberately.",
+      detail:
+        "What made the rewrite safe was that the existing tests asserting on the JavaScript aggregation became the oracle for the SQL version — same inputs, same numbers, or the build fails.",
     },
     {
+      kicker: "CACHING",
       title: "Invalidation over short TTLs",
-      body: "A short TTL is less machinery, but it means a trader can close a position and still see a stale dashboard — the one thing this product cannot do. Publishing invalidation over Redis Pub/Sub keeps every clustered worker consistent the moment data changes. The price is a message bus in the read path and a cache that fails toward correctness rather than availability.",
+      body: "A short expiry would have been simpler, but a trader cannot be shown a drawdown figure that is thirty seconds stale. Cached reads are invalidated by the write that changes them, which means every write path has to know what it affects.",
+      detail:
+        "Publishing invalidation over Redis Pub/Sub keeps every clustered worker consistent the moment data changes. The price is a message bus in the read path and a cache that fails toward correctness rather than availability.",
     },
     {
+      kicker: "SESSIONS",
       title: "httpOnly cookies over localStorage tokens",
-      body: "A token in localStorage is readable by any script that ends up on the page; an httpOnly cookie isn't. That buys XSS resistance and costs me CSRF handling and a same-site policy — a smaller and much better-understood problem than token theft.",
+      body: "Tokens in localStorage are convenient for the client and readable by any script that gets onto the page. Cookies the browser will not hand to JavaScript remove that class of theft, and in exchange require CSRF protection and explicit cross-origin handling.",
+      detail:
+        "CSRF handling and a same-site policy are a smaller and much better-understood problem than token theft.",
     },
     {
+      kicker: "TENANCY",
       title: "Row-level tenant scoping over schema-per-tenant",
-      body: "Separate schemas are safe by construction but make migrations and any cross-tenant query painful. A single schema with scoping applied in one shared place is easier to evolve, and the isolation risk is concentrated where I can test it directly — so there are tests that assert one tenant's queries can never return another's rows.",
+      body: "A schema per tenant isolates data firmly and turns every migration into an operation across N schemas. Scoping by tenant id on the row keeps migrations single and moves the burden onto query discipline: no read path is allowed to omit the scope.",
+      detail:
+        "The isolation risk is concentrated where I can test it directly, so there are tests that assert one tenant's queries can never return another's rows.",
     },
   ],
+  /** `label` is what the page prints; `detail` is what the assistant reads. */
   next: [
-    "Move PostgreSQL off the application box to a managed instance. Co-locating them is the current single point of failure and the thing I'd fix first.",
-    "Containerise the whole thing and run it on Kubernetes, with Terraform managing the infrastructure end to end rather than existing alongside it.",
-    "Replace the last O(n) read path — the equity curve — with a materialised view, since it's the only query that still scales with a trader's history.",
+    {
+      label: "Move PostgreSQL to a managed instance",
+      detail:
+        "Co-locating PostgreSQL with the application is the current single point of failure and the thing I'd fix first.",
+    },
+    {
+      label: "Containerise and run on Kubernetes with Terraform end to end",
+      detail:
+        "Containerise the whole thing and run it on Kubernetes, with Terraform managing the infrastructure end to end rather than existing alongside it.",
+    },
+    {
+      label: "Replace the equity-curve read path with a materialised view",
+      detail:
+        "The equity curve is the last O(n) read path and the only query that still scales with a trader's history.",
+    },
   ],
 } as const;
 
@@ -231,6 +290,15 @@ export const experience = [
     note: "subsidiary — continuous tenure",
     role: "Backend Developer",
     period: "May 2025 — Present",
+    /** One-line framing of the role, for the editorial experience row. */
+    summary:
+      "Building and maintaining the backend APIs, data pipelines and internal dashboards the analytics teams run on, across Django, PostgreSQL and MongoDB.",
+    /** The same work as `points`, cut to the three that carry a number. */
+    highlights: [
+      "Cut database load 40% with ORM and Redis caching",
+      "Automated the data audit into a transcribe-and-validate pipeline",
+      "Hardened auth across MongoDB and PostgreSQL systems",
+    ],
     points: [
       "Built and optimised backend APIs in Django and SQL, using the ORM and Redis caching to cut database load by 40% and improve API response times.",
       "Automated the company's data-audit process end to end: a pipeline that transcribes surveyor audio recordings and validates them against the corresponding database records, replacing line-by-line manual review with exception-only review by auditors.",
@@ -243,6 +311,13 @@ export const experience = [
     company: "OpenStudyAI",
     role: "Full Stack Developer",
     period: "Dec 2024 — May 2025",
+    summary:
+      "Owned the platform's front-end architecture end to end and automated its AI content generation on AWS Bedrock.",
+    highlights: [
+      "Automated AI content generation on AWS Bedrock",
+      "Designed the entire front-end architecture",
+      "Improved scalability 30% by optimising Redux state",
+    ],
     points: [
       "Automated AI content generation on AWS Bedrock, cutting manual workload and increasing output by 50%.",
       "Designed and developed the entire front-end architecture for the platform.",
@@ -289,3 +364,326 @@ export const skills = [
     items: ["Prometheus", "Grafana", "Sentry"],
   },
 ] as const;
+
+/**
+ * Copy for the editorial homepage.
+ *
+ * The layout comes from editorial-design-system/; the words come from the
+ * exports above wherever a real fact exists, so nothing on the page is a
+ * mockup placeholder. Labels are stored pre-uppercased because the design
+ * sets them in Space Mono with wide tracking, where `text-transform` and
+ * hand-cased text kern differently.
+ */
+export const editorial = {
+  brand: "ANISH SHEJAWALE",
+  nav: [
+    { label: "WORK", href: "#work" },
+    { label: "EXPERIENCE", href: "#experience" },
+    { label: "ABOUT", href: "#about" },
+    { label: "CONTACT", href: "#contact" },
+  ],
+  askShortcut: "ASK",
+
+  hero: {
+    kicker: "PORTFOLIO / 2026",
+    /** Set as two lines in the design; the break is deliberate, not a wrap. */
+    title: ["ANISH", "SHEJAWALE"],
+    role: "BACKEND DEVELOPER",
+    locale: "IN / UTC+5:30",
+    lede: site.tagline,
+    aside: [
+      { label: "STATUS", kind: "status", value: "AVAILABLE FOR OPPORTUNITIES" },
+      {
+        label: "FOCUS",
+        kind: "list",
+        items: ["Backend Systems", "Cloud Infrastructure", "Applied AI"],
+      },
+      { label: "LOCATION", kind: "value", value: site.location },
+      {
+        label: "CURRENTLY BUILDING",
+        kind: "value",
+        value: "PropVexis — a live multi-tenant SaaS trading journal",
+      },
+    ],
+  },
+
+  /**
+   * FIG. 01 — the PropVexis write path, same six nodes as `architecture`
+   * above, mapped onto the design's fixed 1200×150 geometry.
+   */
+  figure: {
+    caption: "FIG. 01 — HOW A CLOSED TRADE REACHES THE TRADER'S SCREEN",
+    mode: "WRITE PATH / IDEMPOTENT",
+    source: "MT5 AGENT",
+    api: "INGEST API",
+    apiSub: "idempotent writes",
+    upper: "POSTGRESQL",
+    lower: "REDIS",
+    lowerSub: "cache · pub/sub",
+    worker: "RULE ENGINE",
+    workerSub: "drawdown · targets",
+    sink: "BROWSER",
+    sinkSub: "under 1s end to end",
+    loop: "invalidate on write",
+  },
+
+  work: {
+    label: "01 / SELECTED WORK",
+    archive: "ARCHIVE",
+    archiveLink: { label: "→ ALL PROJECTS", href: site.github },
+    caseStudyCta: "→ VIEW CASE STUDY",
+    projectCta: "→ VIEW PROJECT",
+  },
+
+  experience: {
+    label: "02 / EXPERIENCE",
+    impactLabel: "SELECTED IMPACT",
+    footer: "FULL HISTORY",
+    footerLink: { label: "→ RESUME", href: site.resume },
+  },
+
+  about: {
+    label: "03 / ABOUT",
+    statement:
+      "I'm a software engineer interested in understanding what happens underneath the abstraction.",
+    paragraphs: [
+      site.intro,
+      "Lately that has extended to applied AI: using models as components inside real systems rather than as demos, with the same attention to failure modes, cost, and latency.",
+    ],
+    link: { label: "→ DOWNLOAD RESUME", href: site.resume },
+    psTag: "P.S.",
+    ps: "Most of this gets built late at night, with filter coffee and a Counter-Strike round between deploys.",
+  },
+
+  /** Reads the `skills` groups directly — no second copy of the list. */
+  stack: {
+    label: "STACK",
+  },
+
+  currently: {
+    label: "CURRENTLY",
+    cells: [
+      { key: "BUILDING", value: "PropVexis — real-time trading infrastructure" },
+      { key: "LEARNING", value: "Applied AI engineering" },
+      { key: "EXPLORING", value: "Cloud architecture and distributed systems" },
+      { key: "OUTSIDE WORK", value: "Counter-Strike · Coffee · Building things" },
+    ],
+  },
+
+  ask: {
+    label: "04 / ASK",
+    system: "KNOWLEDGE SYSTEM",
+    online: "ONLINE",
+    title: ["ASK ME", "ANYTHING."],
+    blurb:
+      "Instead of searching through my portfolio, ask my AI assistant about my experience, projects, technologies, or what I'm currently building.",
+    formLabel: "ASK ABOUT MY EXPERIENCE, PROJECTS, OR WHAT I'M BUILDING",
+    placeholder: "Type a question…",
+    palettePlaceholder: "Ask about experience, projects, technologies…",
+    schematic: ["QUESTION", "CONTEXT", "RETRIEVAL", "RESPONSE"],
+    kbLabel: "KNOWLEDGE BASE",
+    kbActive: "ACTIVE",
+    kbRows: { projects: "PROJECTS", experience: "EXPERIENCE", tech: "TECHNOLOGIES", focus: "CURRENT FOCUS" },
+    statusIdle: "ASSISTANT STATUS",
+    statusOpen: "ASSISTANT",
+    stateReady: "READY",
+    stateBusy: "RETRIEVING",
+    queryLabel: "QUERY",
+    responseLabel: "RESPONSE",
+    retrievingLabel: "RETRIEVING CONTEXT…",
+    /** Occupies the design's SOURCE slot, and has to stay true. */
+    sourceLabel: "SOURCE",
+    source: "FIXED KNOWLEDGE BASE · GEMINI",
+    sourceFailed: "—",
+    suggestionsLabel: "SUGGESTED QUERIES",
+    relatedLabel: "RELATED QUERIES",
+    relatedHref: { label: "Browse selected work", href: "#work" },
+    reset: "← NEW QUERY",
+    esc: "ESC",
+    enterToAsk: "TO ASK",
+  },
+
+  contact: {
+    title: ["LET'S BUILD", "SOMETHING", "INTERESTING."],
+    /** Rendered as icons in the send row; `value` is the accessible name. */
+    links: [
+      { id: "email", label: "Email", value: site.email, href: `mailto:${site.email}` },
+      { id: "linkedin", label: "LinkedIn", value: "/in/anish358", href: site.linkedin },
+      { id: "github", label: "GitHub", value: "@Anish358", href: site.github },
+    ],
+    fields: {
+      name: { label: "NAME", placeholder: "Your name" },
+      email: { label: "EMAIL", placeholder: "your@email.com" },
+      message: {
+        label: "MESSAGE",
+        placeholder: "Tell me a little about what you're working on.",
+      },
+    },
+    required: "REQUIRED",
+    invalidEmail: "ENTER A VALID EMAIL",
+    sending: "SENDING…",
+    submit: "SEND MESSAGE →",
+    sent: {
+      label: "MESSAGE SENT",
+      text: "Thank you — I'll get back to you soon.",
+      note: "TRANSMITTED SUCCESSFULLY",
+    },
+    failed: {
+      label: "UNABLE TO SEND",
+      text: "Something went wrong. Please try again.",
+      retry: "RETRY →",
+    },
+  },
+
+  footer: {
+    left: "ANISH SHEJAWALE — 2026",
+    right: "Built with curiosity.",
+  },
+} as const;
+
+/** Row counts for the ASK panel's knowledge-base table. Derived, never typed. */
+export const knowledgeBase = {
+  projects: projects.length,
+  experience: experience.length,
+  technologies: skills.reduce((total, group) => total + group.items.length, 0),
+} as const;
+
+/**
+ * Chrome for the editorial case-study template.
+ *
+ * Layout and every measurement come from
+ * editorial-design-system-new/project/"PropVexis - Case Study.dc.html".
+ * The substance — problem, features, decisions, next steps, diagram, pipeline
+ * — is read from the exports above, so this holds only the page furniture.
+ *
+ * `/luxora` was never mocked. It's the same template with the sections it has
+ * content for, which is exactly how the design brief framed it.
+ */
+export const caseStudyPages = {
+  propvexis: {
+    chrome: "CASE STUDY 01 / SELECTED WORK",
+    eyebrow: "FLAGSHIP / LIVE IN PRODUCTION",
+    title: "PROPVEXIS",
+    subject: "RISK MANAGEMENT FOR FUNDED TRADERS",
+    period: "2025 —",
+    lede: "Real-time drawdown tracking that tells a trader where they stand right now, not what happened yesterday.",
+    aside: [
+      { label: "STATUS", kind: "status", value: "LIVE IN PRODUCTION" },
+      {
+        label: "LIVE SITE",
+        kind: "link",
+        value: "app.propvexis.com",
+        href: "https://app.propvexis.com",
+      },
+      {
+        label: "GITHUB",
+        kind: "link",
+        value: "github.com/Anish358/propvexis",
+        href: "https://github.com/Anish358/propvexis",
+      },
+      { label: "STACK", kind: "stack" },
+    ],
+    problem: { label: "01 / THE PROBLEM", counter: "01 — 06", tag: "ONE SHOT" },
+    dataPath: {
+      label: "02 / HOW IT FITS TOGETHER",
+      counter: "DATA PATH",
+      figure: "FIG. 01 — CLOSED TRADE FROM TERMINAL TO SCREEN",
+      mode: "WRITE PATH / IDEMPOTENT",
+    },
+    features: { label: "03 / WHAT IT DOES", counter: "04 FEATURES" },
+    tradeOffs: {
+      label: "04 / TRADE-OFFS",
+      counter: "06 DECISIONS",
+      headline: "WHAT I CHOSE, AND WHAT IT COST.",
+      blurb:
+        "Six decisions where the alternative was reasonable and I picked the other one. Each of these is a constraint the system now lives with.",
+    },
+    pipeline: { label: "05 / PIPELINE", counter: "05 STAGES / GITHUB ACTIONS" },
+    infrastructure: {
+      label: "06 / INFRASTRUCTURE",
+      counter: "03 ENVIRONMENTS",
+      runtimeLabel: "RUNTIME",
+      runtime: [
+        { key: "HOST", value: "AWS EC2" },
+        { key: "ENVIRONMENTS", value: "03" },
+        { key: "SECRETS", value: "SSM" },
+        { key: "OBSERVABILITY", value: "GRAFANA · SENTRY" },
+        { key: "BACKUPS", value: "NIGHTLY / S3", accent: true },
+      ],
+    },
+    whatsNext: { label: "07 / WHAT'S NEXT", counter: "03 ITEMS" },
+    nextProject: {
+      kicker: "NEXT PROJECT — 02",
+      name: "LUXORA",
+      href: "/luxora",
+    },
+    palette: {
+      placeholder: "Ask about this project, the stack, the trade-offs…",
+      suggestions: [
+        "What does PropVexis actually do?",
+        "How does a trade reach the browser?",
+        "What was the hardest trade-off?",
+        "How is it deployed?",
+      ],
+    },
+  },
+
+  luxora: {
+    chrome: "CASE STUDY 02 / SELECTED WORK",
+    eyebrow: "E-COMMERCE PLATFORM",
+    title: "LUXORA",
+    subject: "COMMERCE, PAYMENTS AND ANALYTICS",
+    /** No dated period on record for this one, so the rule row runs unbroken. */
+    period: null,
+    lede: "A full e-commerce platform built end to end — catalogue, checkout, and an operator console with live numbers.",
+    aside: [
+      { label: "STATUS", kind: "status", value: "LIVE" },
+      {
+        label: "LIVE SITE",
+        kind: "link",
+        value: "luxora-mu.vercel.app",
+        href: "https://luxora-mu.vercel.app/",
+      },
+      {
+        label: "GITHUB",
+        kind: "link",
+        value: "github.com/Anish358/luxora",
+        href: "https://github.com/Anish358/luxora",
+      },
+      { label: "STACK", kind: "stack" },
+    ],
+    problem: { label: "01 / THE PROBLEM", counter: "01 — 02", tag: "THE HARD PARTS" },
+    dataPath: null,
+    features: { label: "02 / WHAT IT DOES", counter: "03 FEATURES" },
+    tradeOffs: null,
+    pipeline: null,
+    infrastructure: null,
+    whatsNext: null,
+    nextProject: {
+      kicker: "NEXT PROJECT — 01",
+      name: "PROPVEXIS",
+      href: "/propvexis",
+    },
+    palette: {
+      placeholder: "Ask about this project, the stack, the trade-offs…",
+      suggestions: [
+        "What is Luxora?",
+        "What did he build into it?",
+        "How did he cut its response times?",
+        "What technologies does Anish work with?",
+      ],
+    },
+  },
+} as const;
+
+/** Shared furniture across both case studies. */
+export const caseStudyChrome = {
+  back: "← ANISH SHEJAWALE",
+  nav: [
+    { label: "WORK", href: "/#work" },
+    { label: "CONTACT", href: "/#contact" },
+  ],
+  end: "END OF CASE STUDY",
+  allProjects: { label: "← ALL PROJECTS", href: "/#work" },
+  viewProject: "VIEW PROJECT →",
+} as const;

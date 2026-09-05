@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Handoff bundle from Claude Design — prototype source, not ours to lint.
+    "editorial-design-system*/**",
   ]),
 ]);
 

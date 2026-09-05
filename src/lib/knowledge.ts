@@ -175,7 +175,10 @@ const projectsSection = section(
         project.oneLiner,
         `The problem it solves: ${project.problem}`,
         project.features
-          .map((feature) => `**${feature.title}.** ${feature.body}`)
+          .map(
+            (feature) =>
+              `**${feature.title}.** ${feature.body}${feature.detail ? ` ${feature.detail}` : ""}`,
+          )
           .join("\n\n"),
       ];
       if (project.infra) parts.push(`Infrastructure: ${project.infra}`);
@@ -209,7 +212,7 @@ alternative he rejected and the price he paid for choosing as he did. When
 someone asks why he built something a particular way, answer from here.
 
 ${caseStudy.decisions
-  .map((decision) => `**${decision.title}.** ${decision.body}`)
+  .map((decision) => `**${decision.title}.** ${decision.body} ${decision.detail}`)
   .join("\n\n")}
 `,
 );
@@ -219,7 +222,7 @@ const nextSection = section(
   `
 He volunteers these unprompted — they are known weaknesses, not hidden ones.
 
-${bullets(caseStudy.next)}
+${bullets(caseStudy.next.map((item) => item.detail))}
 `,
 );
 

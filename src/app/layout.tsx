@@ -1,17 +1,21 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Archivo, Space_Mono } from "next/font/google";
 import { site } from "@/lib/content";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
+/* Archivo for display and prose, Space Mono for labels and numbers. */
+const archivo = Archivo({
+  variable: "--font-archivo",
   subsets: ["latin"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 
-const jetbrains = JetBrains_Mono({
-  variable: "--font-jetbrains",
+const spaceMono = Space_Mono({
+  variable: "--font-space-mono",
   subsets: ["latin"],
+  weight: ["400", "700"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 
@@ -52,13 +56,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${inter.variable} ${jetbrains.variable}`}>
-      <body className="min-h-dvh">
-        <a
-          href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-md focus:bg-surface-2 focus:px-4 focus:py-2 focus:text-sm"
-        >
-          Skip to content
+    <html lang="en" className={`${archivo.variable} ${spaceMono.variable}`}>
+      <body>
+        <a href="#main" className="ed-skip">
+          SKIP TO CONTENT
         </a>
         {children}
         <script
