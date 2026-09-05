@@ -1,5 +1,13 @@
 # Transition: portfolio → AI-assisted personal site
 
+> **Status: shipped.** This is the design document the assistant was built
+> from, kept as a record of the reasoning — the grounding rule, the scope
+> enforcement, the cost ceiling and the eval set are the parts worth being able
+> to point at. Two things have since moved on: the model is Gemini rather than
+> Claude (§11), and section 6 describes the dark chat panel that the editorial
+> redesign replaced — the assistant is now the ASK section and the ⌘K palette.
+> For how the site is built today, read the README.
+
 **Goal.** Let a visitor ask questions about Anish — experience, skills, projects,
 background — and get grounded, accurate answers in seconds. The assistant answers
 about *him only*, never invents a fact, and hands off to the contact form when it

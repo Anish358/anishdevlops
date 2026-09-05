@@ -90,7 +90,9 @@ export function CaseStudy({ slug }: { slug: Slug }) {
               <span>{page.dataPath.figure}</span>
               <span>{page.dataPath.mode}</span>
             </div>
-            <DataPath />
+            <div className="ed-figure-scroll">
+              <DataPath />
+            </div>
             <p className="ed-cs-prose ed-cs-figure-note">{architecture.caption}</p>
           </div>
         </section>

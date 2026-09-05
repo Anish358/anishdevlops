@@ -370,11 +370,20 @@
   padding-bottom: 22px;
 }
 
+/* Both schematics are drawn on a 1200-unit grid with 10.5px labels. Scaled
+   to a phone that text lands under 4px, so the container scrolls and the
+   diagram holds a legible size instead. Above ~900px nothing scrolls and the
+   rendering is unchanged. */
+.editorial .ed-figure-scroll {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+
 .editorial .ed-figure-svg {
   width: 100%;
+  min-width: 900px;
   height: auto;
   display: block;
-  overflow: visible;
 }
 
 /* ------------------------------------------------------------------ work */
@@ -1537,6 +1546,7 @@
 
 .editorial .ed-cs-figure-svg {
   width: 100%;
+  min-width: 900px;
   height: auto;
   display: block;
 }

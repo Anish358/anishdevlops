@@ -119,7 +119,22 @@ several children.
 
 ## Before launch
 
+- [ ] Set `RESEND_API_KEY` in the Vercel project. It is present in `.env.local`
+      but not in the deploy environment, so `/api/contact` will answer 503 and
+      the form will tell people to email directly. Nothing else is missing.
+- [ ] Decide the domain. `site.url` and `site.domain` say `anishdevlops.xyz`,
+      which is what the canonical tags, the OG card and the assistant's system
+      prompt all use. The mock wrote `anishshejawale.com`; if that is the one
+      you want, `site` is the only place to change it.
+- [ ] Write real copy for the `/luxora` features. The three bodies are one
+      sentence each, in a template whose measure is 62ch — it reads thin next
+      to PropVexis. Its hero chrome (eyebrow, subject, problem tag) was written
+      here rather than designed, so it is worth a read too.
 - [ ] Add the PropVexis AI bullet once that feature ships
+
+Verified already: every route reflows cleanly at 320/375/768/1440 with no
+horizontal scroll, both schematics scroll rather than shrink below ~900px, and
+label collisions in the diagrams match the mocks exactly.
 
 ## Deploy
 
