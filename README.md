@@ -119,9 +119,6 @@ several children.
 
 ## Before launch
 
-- [ ] Set `RESEND_API_KEY` in the Vercel project. It is present in `.env.local`
-      but not in the deploy environment, so `/api/contact` will answer 503 and
-      the form will tell people to email directly. Nothing else is missing.
 - [ ] Decide the domain. `site.url` and `site.domain` say `anishdevlops.xyz`,
       which is what the canonical tags, the OG card and the assistant's system
       prompt all use. The mock wrote `anishshejawale.com`; if that is the one
@@ -134,7 +131,10 @@ several children.
 
 Verified already: every route reflows cleanly at 320/375/768/1440 with no
 horizontal scroll, both schematics scroll rather than shrink below ~900px, and
-label collisions in the diagrams match the mocks exactly.
+label collisions in the diagrams match the mocks exactly. All four secrets
+(`GEMINI_API_KEY`, `RESEND_API_KEY`, and the two Upstash values) are set on
+Vercel for both Preview and Production. `CONTACT_FROM` is optional and falls
+back to Resend's shared sender.
 
 ## Deploy
 

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { site } from "@/lib/content";
+import { env } from "@/lib/env";
 
 const LIMITS = { name: 80, email: 160, message: 4000 } as const;
 
@@ -53,7 +54,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const apiKey = process.env.RESEND_API_KEY;
+  const apiKey = env("RESEND_API_KEY");
   if (!apiKey) {
     console.error("[contact] RESEND_API_KEY is not set — cannot deliver message.");
     return NextResponse.json(
@@ -69,7 +70,7 @@ export async function POST(request: Request) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      from: process.env.CONTACT_FROM ?? "Portfolio <onboarding@resend.dev>",
+      from: env("CONTACT_FROM") ?? "Portfolio <onboarding@resend.dev>",
       to: [site.email],
       reply_to: email,
       subject: `Portfolio enquiry — ${name}`,
