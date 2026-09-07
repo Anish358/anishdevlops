@@ -69,9 +69,9 @@ export const architecture = {
     { id: "agent", title: "MT5 Agent", sub: "MQL5" },
     { id: "ingest", title: "Ingest API", sub: "Fastify · idempotent" },
     { id: "db", title: "PostgreSQL", sub: "CTEs · composite idx" },
-    { id: "cache", title: "Redis", sub: "cache · pub/sub" },
+    { id: "cache", title: "Stats Cache", sub: "in-process · LRU + TTL" },
     { id: "rules", title: "Rule Engine", sub: "drawdown · targets" },
-    { id: "client", title: "Browser", sub: "WebSockets" },
+    { id: "client", title: "Browser", sub: "Socket.IO" },
   ],
 } as const;
 
@@ -112,45 +112,56 @@ export const projects: Project[] = [
     features: [
       {
         title: "Real-time ingestion end to end",
-        body: "An MQL5 agent inside MetaTrader 5 posts each closed trade to a Fastify ingest endpoint. The write is deduplicated on the broker's own ticket id, published over Redis pub/sub and pushed to any open browser session with Socket.IO. There is no polling anywhere in the path, and a trader watching an open account sees the equity curve move as positions close.",
+        body: "An MQL5 Expert Advisor inside the trader's MetaTrader 5 terminal posts closed trades to a Fastify endpoint over HTTPS with a per-account token. The write is an upsert keyed on (account, MT5 ticket), so an EA that retries or reconnects mid-batch cannot double-count a fill. The trade lands in PostgreSQL and Socket.IO pushes it into that user's room — there is no polling anywhere in the path, so an open dashboard moves as positions close.",
+        detail:
+          "The Expert Advisor is the free ingestion path. A connector layer behind a sync queue feeds the same seam from MT5 credentials, cTrader OAuth and TradeLocker, with broker secrets sealed under AES-256-GCM whose additional authenticated data is the account id — so a ciphertext lifted from one account's row cannot be replayed into another's.",
       },
       {
         title: "A configurable rule engine",
         body: "Every prop firm writes its rules differently: daily drawdown measured from balance or from equity, maximum drawdown static or trailing, profit targets and minimum trading days. Each firm's rule set is stored as data and evaluated against the account after every trade, so the engine reports distance to breach rather than a verdict after the fact.",
         detail:
-          "Breach and proximity alerts fire before an account is lost, alongside ROI and payout tracking.",
+          "Alerts carry a dedup key, so a proximity warning fires once rather than on every write. Breach is evaluated first and is terminal: an account that crosses its drawdown and its profit target on the same trade is breached, not passed.",
       },
       {
         title: "Analytics moved into the database",
-        body: "Equity curves, win rate, expectancy and per-session breakdowns are computed in PostgreSQL with common table expressions over composite indexes, not assembled in application memory. The API returns a shaped result rather than a page of rows, which keeps response payloads small and the numbers consistent between views.",
+        body: "Equity curves, strike rate, expectancy, profit factor, R-distribution, MFE efficiency and breakdowns by setup, session, instrument and period are computed in PostgreSQL — one CTE query per request over composite indexes, with win/loss streaks done as gap-and-islands. SQL does only COUNT, SUM and GROUP BY; every derived number stays in JavaScript, so a mistake in the SQL surfaces as a count mismatch rather than a quietly different formula.",
         detail:
-          "The dashboard originally aggregated in application loops. After the rewrite, with results cached in Redis and invalidated across clustered workers over Pub/Sub, it holds roughly 1,000 concurrent users on a single instance.",
+          "What made the rewrite safe was keeping the original JavaScript implementation as the test oracle — the suite asserts the SQL path returns the same numbers for the same trades, or the build fails. Results are cached per user and per filter set and dropped by the write that changes them, bounded by LRU plus a TTL backstop because the box has 1 GB of RAM. Rule adherence stays in JavaScript: it evaluates JSONB predicates per trade, which SQL cannot express, and is fetched only for strategies that actually define rules.",
       },
       {
         title: "Multi-tenancy and billing",
-        body: "Accounts, trades and rule sets are scoped per tenant at the row level, with subscription tiers gating account limits and history depth. Billing state and entitlement checks live behind the same API surface as the rest of the product, so a plan change takes effect on the next request rather than on the next deploy.",
+        body: "Every query is scoped by user id, with Google OAuth and email sessions issued as JWTs in httpOnly Secure cookies. Free, Pro and Premium tiers gate account limits and history depth on Razorpay recurring subscriptions, whose webhooks are signature-verified with a timing-safe HMAC over the exact raw request bytes.",
         detail:
-          "Sessions are Google OAuth 2.0 into JWT httpOnly cookies; subscriptions run on Razorpay with idempotent webhooks.",
+          "Passwords are hashed with scrypt from node:crypto rather than bcrypt or argon2, so nothing needs a native build step on a t3.micro that deploys by rsync. Because sessions are stateless JWTs, a password reset would otherwise leave an attacker's existing token working — so every token carries the user's session epoch, a reset bumps it, and that evicts live sessions including open WebSockets.",
       },
     ],
     infra:
-      "GitHub Actions CI/CD to AWS EC2, three isolated environments, secrets in SSM Parameter Store, Terraform, Docker, Prometheus/Grafana and Sentry, nightly S3 backups.",
+      "GitHub Actions deploys on merge to main — test-gated, then build, rsync to EC2, auto-migrate, pm2 reload — across three isolated environments on a single t3.micro in ap-south-1. Caddy terminates TLS automatically and reverse-proxies the API and the WebSocket. Secrets load from SSM Parameter Store through the instance IAM role and fail closed if SSM is unreachable, so no static AWS keys and no secret values sit on disk. Nightly pg_dump to S3 under a least-privilege instance role with 90-day lifecycle expiry, restores verified with pg_restore. Sentry on both ends, Prometheus and Grafana for RED metrics and connection-pool saturation, and a Route53 health check into CloudWatch and SNS that catches an outage in about 90 seconds.",
+    /*
+     * Redis is deliberately absent. The integration is written and tested
+     * (shared socket adapter, cross-worker cache invalidation) but it is not
+     * provisioned in production, which ships one worker per environment — so
+     * listing it here would claim a running dependency that isn't running.
+     */
     stack: [
       "Node.js",
       "Fastify",
       "PostgreSQL",
-      "Redis",
       "Socket.IO",
       "React",
       "MQL5",
       "AWS",
-      "Docker",
+      "Caddy",
+      "pm2",
       "Terraform",
+      "Docker",
       "GitHub Actions",
+      "Prometheus",
+      "Sentry",
     ],
-    stackLine: "Node.js · Fastify · PostgreSQL · Redis · AWS",
+    stackLine: "Node.js · Fastify · PostgreSQL · Socket.IO · AWS",
     flow: ["INGEST", "EVALUATE", "STREAM"],
-    stat: "~1k concurrent users · single instance · sub-second updates",
+    stat: "1,711 tests · 31 migrations · 3 envs on one t3.micro",
     links: [
       { label: "Live site", href: "https://app.propvexis.com" },
       { label: "GitHub", href: "https://github.com/Anish358/propvexis" },
@@ -162,27 +173,42 @@ export const projects: Project[] = [
     badge: "E-commerce platform",
     caseStudy: "/luxora",
     oneLiner:
-      "A full e-commerce platform with payments, an admin console and live analytics.",
+      "A full MERN storefront built end to end — catalogue, cart, cash-on-delivery checkout, and a separate operator console.",
     problem:
-      "Built end to end to understand the parts of commerce that are genuinely hard: keeping a catalogue consistent, taking money safely, and giving an operator real numbers instead of a wall of rows.",
+      "Built to work through the parts of commerce that are actually fiddly rather than the parts that demo well: keeping a catalogue coherent across categories and sizes, holding a cart that survives a login, and giving an operator somewhere to move an order through its stages.",
     features: [
       {
-        title: "Catalogue and checkout",
-        body: "A 300+ product catalogue with secure payment integration, built on Express and MongoDB.",
+        title: "Catalogue and storefront",
+        body: "Nine storefront pages over an Express and MongoDB API: a catalogue spanning Men, Women and Kids, each with topwear, bottomwear and winterwear, searched and filtered on the client, with per-size selection on the product page. Product images upload through Multer and are served from Cloudinary rather than off the app box.",
+      },
+      {
+        title: "A cart that survives the session",
+        body: "The cart lives on the user document in MongoDB rather than in browser state, so it follows a login across devices. Checkout writes an order with its items, amount and address and empties the cart in the same flow, and every customer gets their own order history.",
       },
       {
         title: "Operator console",
-        body: "An admin panel for product management with real-time monitoring and interactive analytics charts.",
-      },
-      {
-        title: "Caching layer",
-        body: "Cut server load and response times by roughly 30% by caching hot product queries in Redis.",
+        body: "A second React app against the same API, gated by its own admin middleware: add a product with several images at once, list and remove stock, and walk an order through its fulfilment stages. Customer and admin routes are separated at the middleware layer, so an ordinary user token cannot reach an admin endpoint.",
+        detail:
+          "Auth is bcrypt with a generated salt plus JWTs, and email format is validated server-side before a user row is written. The admin surface is a separate deployable, not a route inside the storefront.",
       },
     ],
-    stack: ["React", "TypeScript", "OAuth", "Express", "MongoDB", "Redis", "AWS", "Docker"],
-    stackLine: "React · Express · MongoDB · Redis · AWS",
-    flow: ["CATALOGUE", "CHECKOUT", "ANALYTICS"],
-    stat: "300+ products · Redis-cached reads · ~30% faster responses",
+    stack: [
+      "React",
+      "Vite",
+      "React Router",
+      "Tailwind CSS",
+      "Express",
+      "MongoDB",
+      "Mongoose",
+      "JWT",
+      "bcrypt",
+      "Cloudinary",
+      "Multer",
+      "Render",
+    ],
+    stackLine: "React · Express · MongoDB · Cloudinary · Render",
+    flow: ["CATALOGUE", "CART", "FULFILMENT"],
+    stat: "3 apps · 52-product seed · admin-gated API",
     links: [
       { label: "Live site", href: "https://luxora-mu.vercel.app/" },
       { label: "GitHub", href: "https://github.com/Anish358/luxora" },
@@ -202,7 +228,7 @@ export const caseStudy = {
     {
       kicker: "DELIVERY",
       title: "Idempotent ingest, not at-most-once delivery",
-      body: "The agent retries whenever the network drops, which means the same trade can arrive several times. Deduplicating on the broker ticket id at write time makes replays harmless, at the cost of a uniqueness constraint the ingest path has to honour and a slightly heavier write.",
+      body: "The agent retries whenever the network drops, which means the same trade can arrive several times. Deduplicating on (account, MT5 ticket) at write time makes replays harmless, at the cost of a uniqueness constraint the ingest path has to honour and a slightly heavier write.",
       detail:
         "The agent runs on a trader's home PC over a connection I don't control, so retries and duplicate batches aren't edge cases — they're the normal operating condition. Deduplicating at write time lets the agent retry blindly and stay dumb. The alternative, tracking acknowledgement state on the client, puts correctness in the least reliable part of the system.",
     },
@@ -225,7 +251,7 @@ export const caseStudy = {
       title: "Invalidation over short TTLs",
       body: "A short expiry would have been simpler, but a trader cannot be shown a drawdown figure that is thirty seconds stale. Cached reads are invalidated by the write that changes them, which means every write path has to know what it affects.",
       detail:
-        "Publishing invalidation over Redis Pub/Sub keeps every clustered worker consistent the moment data changes. The price is a message bus in the read path and a cache that fails toward correctness rather than availability.",
+        "Invalidation fans out over Redis pub/sub when REDIS_URL is set, which is what makes more than one worker possible — it ships one worker per environment today, so that fan-out is written and tested rather than in service. The invariant is that local invalidation never depends on the transport: if the publish fails, the worker that handled the write still drops its own entries, because showing the writing user their own stale dashboard is worse than the cross-worker staleness this fixes.",
     },
     {
       kicker: "SESSIONS",
@@ -245,19 +271,19 @@ export const caseStudy = {
   /** `label` is what the page prints; `detail` is what the assistant reads. */
   next: [
     {
-      label: "Move PostgreSQL to a managed instance",
+      label: "Move PostgreSQL off the application box",
       detail:
-        "Co-locating PostgreSQL with the application is the current single point of failure and the thing I'd fix first.",
+        "All three environments share one native PostgreSQL 16 instance on the same t3.micro as the API. That co-location is the system's single point of failure and the first thing I would fix; a managed instance also lifts the max_connections ceiling that currently caps how many workers can run.",
     },
     {
-      label: "Containerise and run on Kubernetes with Terraform end to end",
+      label: "Provision Redis and run more than one worker",
       detail:
-        "Containerise the whole thing and run it on Kubernetes, with Terraform managing the infrastructure end to end rather than existing alongside it.",
+        "Both correctness blockers for pm2 cluster mode — a shared Socket.IO adapter and cross-worker cache invalidation — are already solved in code behind REDIS_URL. What remains is operational: provision Redis, upsize the instance (each worker is 90 to 150 MB RSS on a 1 GB box already running three environments), and lower PG_POOL_MAX, since total connections are workers times pool size against a max_connections of 100.",
     },
     {
-      label: "Replace the equity-curve read path with a materialised view",
+      label: "Finish the connector layer and scale the sync fleet",
       detail:
-        "The equity curve is the last O(n) read path and the only query that still scales with a trader's history.",
+        "MT5 credential sync, cTrader OAuth and TradeLocker connectors already feed one ingestion seam behind a queue. The next step is a horizontally scaled sync-worker fleet, so cloud sync stops sharing a process with the API.",
     },
   ],
 } as const;
@@ -399,8 +425,8 @@ export const editorial = {
     api: "INGEST API",
     apiSub: "idempotent writes",
     upper: "POSTGRESQL",
-    lower: "REDIS",
-    lowerSub: "cache · pub/sub",
+    lower: "CACHE",
+    lowerSub: "in-process · per user",
     /*
      * "RULES", not "RULE ENGINE" as on the case study. The design tuned this
      * node's geometry around a six-character label: the dashed feedback arc
@@ -633,10 +659,10 @@ export const caseStudyPages = {
     chrome: "CASE STUDY 02 / SELECTED WORK",
     eyebrow: "E-COMMERCE PLATFORM",
     title: "LUXORA",
-    subject: "COMMERCE, PAYMENTS AND ANALYTICS",
+    subject: "CATALOGUE, CART AND FULFILMENT",
     /** No dated period on record for this one, so the rule row runs unbroken. */
     period: null,
-    lede: "A full e-commerce platform built end to end — catalogue, checkout, and an operator console with live numbers.",
+    lede: "A storefront, a customer account and an operator console — three apps over one Express API.",
     aside: [
       { label: "STATUS", kind: "status", value: "LIVE" },
       {
@@ -653,7 +679,7 @@ export const caseStudyPages = {
       },
       { label: "STACK", kind: "stack" },
     ],
-    problem: { label: "01 / THE PROBLEM", counter: "01 — 02", tag: "THE HARD PARTS" },
+    problem: { label: "01 / THE PROBLEM", counter: "01 — 02", tag: "THE FIDDLY PARTS" },
     dataPath: null,
     features: { label: "02 / WHAT IT DOES", counter: "03 FEATURES" },
     tradeOffs: null,
@@ -670,7 +696,7 @@ export const caseStudyPages = {
       suggestions: [
         "What is Luxora?",
         "What did he build into it?",
-        "How did he cut its response times?",
+        "How does its admin panel work?",
         "What technologies does Anish work with?",
       ],
     },
